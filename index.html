@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SharkTube – Collapsible Flyout Portal</title>
+  <style>
+    /* 1. Reset and Base Styles */
+    :root { 
+        --w: 960px; 
+        --menu-width: 300px; 
+        --flyout-width: 350px; /* Width for the video list flyout */
+        --color-accent: #BEA876; /* NEW: Gold/Accent Color for Teachers/Headers */
+        --color-primary-bg: #283891; /* NEW: Dark Blue for Sidebar/Flyout Background */
+        --color-bg-dark: #0b0d10;
+        --color-text-white: #FFFFFF; /* White for Categories/Videos */
+        --color-dark-hover: #3a4a9f; /* Slightly lighter shade of the background for hover state */
+    }
+    body { 
+        margin: 0; min-height: 100vh; background: var(--color-bg-dark); 
+        color: var(--color-text-white); font-family: system-ui, sans-serif;
+        display: flex; justify-content: center; align-items: flex-start; padding: 20px;
+    }
+    .container { 
+        display: flex; 
+        /* Total width: Player (960) + Sidebar (300) + Gaps (40) + Flyout (350) */
+        width: calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px); 
+        max-width: 100%; 
+        gap: 20px; 
+        position: relative; 
+    }
+    .content-area { flex-grow: 1; }
+
+    /* 2. Sidebar (Menu) Styles */
+    #sidebar {
+        width: var(--menu-width);
+        background: var(--color-primary-bg); /* Use new blue background */
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.3);
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        position: relative; 
+        z-index: 10;
+    }
+    #sidebar h3 { 
+        margin-top: 0; 
+        color: var(--color-accent); /* Use new gold accent color */
+        text-decoration: underline; /* Underline the title */
+        padding-bottom: 5px;
+    }
+    #loadingMessage { padding: 10px; font-size: 0.9em; }
+    
+    /* Menu List Styles */
+    .teacher-list, .category-list { list-style: none; padding: 0; margin: 0; }
+
+    /* --- Collapsible Headers (Teacher & Category) --- */
+    .teacher-header { 
+        font-weight: bold; 
+        font-size: 1.25em; 
+        color: var(--color-accent); /* Teachers in gold/accent color */
+        padding: 10px 5px; 
+        margin-top: 10px;
+        cursor: pointer; 
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid var(--color-dark-hover);
+    }
+    .teacher-header::after { content: '+'; font-size: 1.2em; transition: transform 0.3s; }
+    .teacher-header.open::after { content: '-'; transform: rotate(0deg); }
+
+
+    .collapsible-header { 
+        padding: 8px 5px; 
+        margin-bottom: 5px; 
+        color: var(--color-text-white); /* Categories in white */
+        font-size: 1.0em;
+        font-weight: normal; 
+        cursor: pointer; 
+        user-select: none; 
+        display: flex; 
+        justify-content: space-between;
+        align-items: center; 
+        border-bottom: 1px solid var(--color-dark-hover); 
+        transition: background-color 0.2s;
+        padding-left: 25px; /* Indentation */
+    }
+    .collapsible-header:hover { background-color: var(--color-dark-hover); }
+
+    /* Chevron symbol for flyout */
+    .collapsible-header::after { 
+        content: '▸'; 
+        font-size: 1.1em; 
+        transition: transform 0.3s; 
+        margin-left: 10px;
+    }
+    
+    .collapsible-header.active { 
+        background-color: var(--color-accent); /* Active state uses gold accent color */
+        color: var(--color-primary-bg); /* Text color set to dark blue background */
+    }
+    
+    /* Content hiding/showing */
+    .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
+
+    /* --- Flyout Menu (Video List) --- */
+    #videoFlyout {
+        position: absolute;
+        top: 0;
+        left: calc(var(--menu-width) + 20px); 
+        width: var(--flyout-width);
+        background: var(--color-primary-bg); /* Use new blue background */
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 8px 8px 20px rgba(0,0,0,.5);
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        display: none; 
+        z-index: 20;
+    }
+    #flyoutHeader { 
+        font-size: 1.3em; 
+        font-weight: bold; 
+        color: var(--color-accent); /* Flyout header in gold/accent color */
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid var(--color-dark-hover);
+    }
+    .video-list { list-style: none; padding: 0; margin: 0; }
+    .video-list li {
+        padding: 8px 10px; 
+        cursor: pointer; 
+        border-left: 3px solid transparent;
+        transition: background-color 0.2s, border-left-color 0.2s; 
+        font-size: 0.95em;
+        line-height: 1.3;
+        white-space: normal; 
+        color: var(--color-text-white); /* Video titles in white */
+    }
+    .video-list li.selected { border-left-color: var(--color-accent); font-weight: bold; }
+    .video-list li:hover { background-color: var(--color-dark-hover); }
+
+    /* 3. Player & Controls */
+    .wrap { position: relative; width: 100%; aspect-ratio: 16/9; background:#000; border-radius: 12px 12px 0 0; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+    #player { width: 100%; height: 100%; pointer-events: none; }   
+    .controls { width: 100%; background: var(--color-primary-bg); padding: 10px 15px; display: flex; align-items: center; gap: 15px; box-shadow: 0 8px 24px rgba(0,0,0,.4); border-radius: 0 0 12px 12px; }
+    .btn { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
+    #seekRange { flex-grow: 1; }
+    input[type="range"] { -webkit-appearance: none; appearance: none; height: 5px; background: #555; cursor: pointer; border-radius: 5px;}
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent); cursor: pointer; }
+    .finished { position:absolute; inset:0; display:grid; place-items:center; background:var(--color-bg-dark); text-align:center; padding:2rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- LEFT COLUMN: DYNAMIC MENU SIDEBAR (Teacher -> Category) -->
+    <div id="sidebar">
+        <h3>Video Library</h3>
+        <p id="loadingMessage">Loading videos...</p>
+        <ul class="teacher-list" id="menuList" style="display:none">
+            <!-- Menu items will be generated here -->
+        </ul>
+    </div>
+    
+    <!-- MIDDLE COLUMN: VIDEO LIST FLYOUT (New Element) -->
+    <div id="videoFlyout" style="display:none;">
+        <div id="flyoutHeader">Videos in Category</div>
+        <ul class="video-list" id="flyoutList">
+            <!-- Video list will be generated here on category click -->
+        </ul>
+    </div>
+
+    <!-- RIGHT COLUMN: VIDEO PLAYER & CONTROLS -->
+    <div class="content-area">
+        <div class="wrap">
+            <div id="player" referrerpolicy="strict-origin-when-cross-origin"></div>
+            <div class="finished" id="finished" style="display:none">
+                <div>
+                    <h2>All done.</h2>
+                    <p>This video has ended. Click a title on the left to watch another.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Control Bar -->
+        <div class="controls" id="controls" style="display:none;">
+            <button class="btn" id="playPauseBtn">▶</button>
+            <input type="range" id="seekRange" min="0" max="100" value="0">
+            <input type="range" id="volumeRange" min="0" max="100" value="100" style="width: 80px;">
+        </div>
+    </div>
+  </div>
+
+  <!-- Load the YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api" referrerpolicy="strict-origin-when-cross-origin"></script>
+  <script>
+    // =========================================================================
+    // === 1. DATA CONFIGURATION ===============================================
+    // =========================================================================
+    // !!! THIS IS THE DEPLOYED GOOGLE APPS SCRIPT URL !!!
+    const APPS_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycbx5911lrXGR7GuSHQ-esRJH68v4q-nYzrLjgGQC5hZiDoN8ZhOJ1BieWeWhiJDiWukP/exec'; 
+
+    let VIDEO_DATA = [];
+    
+    // =========================================================================
+    // === 2. PLAYER & CONTROL LOGIC ===========================================
+    // =========================================================================
+    
+    const ORIGIN = location.origin; 
+    let player;
+    let updateTimer; 
+    let isPlayerReady = false;
+
+    // DOM Elements
+    const finishedEl = document.getElementById('finished');
+    const controlsEl = document.getElementById('controls');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const seekRange = document.getElementById('seekRange');
+    const volumeRange = document.getElementById('volumeRange');
+    const menuListEl = document.getElementById('menuList');
+    const loadingMessageEl = document.getElementById('loadingMessage');
+    const flyoutEl = document.getElementById('videoFlyout');
+    const flyoutListEl = document.getElementById('flyoutList');
+    const flyoutHeaderEl = document.getElementById('flyoutHeader');
+    
+    // Player functions
+    window.onYouTubeIframeAPIReady = function () { isPlayerReady = true; };
+
+    function initializePlayer(initialVideoId) {
+        if (player) {
+            try { player.destroy(); } catch (e) { /* silent fail */ }
+            if (updateTimer) clearInterval(updateTimer);
+        }
+
+        player = new YT.Player('player', {
+            videoId: initialVideoId,
+            host: 'https://www.youtube-nocookie.com', 
+            playerVars: {
+                controls: 0, disablekb: 1, rel: 0, fs: 0, iv_load_policy: 3, modestbranding: 1, playsinline: 1,
+                enablejsapi: 1, origin: ORIGIN
+            },
+            events: {
+                onReady: onReady,
+                onStateChange: onStateChange,
+                onError: (e) => console.error('YouTube Player Error:', e.data)
+            }
+        });
+    }
+
+    function onReady(e) {
+      controlsEl.style.display = 'flex';
+      player.setVolume(100);
+      playPauseBtn.addEventListener('click', togglePlayPause);
+      volumeRange.addEventListener('input', setVolume);
+      seekRange.addEventListener('change', seekVideo);
+      
+      if (updateTimer) clearInterval(updateTimer); 
+      updateTimer = setInterval(updatePlayerState, 1000);
+    }
+    
+    function togglePlayPause() {
+        const state = player.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            playPauseBtn.textContent = '▶';
+        } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.CUED) {
+            player.playVideo();
+            playPauseBtn.textContent = '⏸';
+        }
+    }
+    function setVolume() {
+        const volume = parseInt(volumeRange.value, 10);
+        player.setVolume(volume);
+    }
+    function seekVideo() {
+        const duration = player.getDuration();
+        const seekToTime = (seekRange.value / 100) * duration;
+        player.seekTo(seekToTime, true);
+        if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
+            player.playVideo();
+            playPauseBtn.textContent = '⏸';
+        }
+    }
+    function updatePlayerState() {
+        if (player && player.getPlayerState) {
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                const currentTime = player.getCurrentTime();
+                const duration = player.getDuration();
+                const percentage = (currentTime / duration) * 100;
+                seekRange.value = percentage;
+                playPauseBtn.textContent = '⏸';
+            } else if (state === YT.PlayerState.PAUSED) {
+                playPauseBtn.textContent = '▶';
+            }
+        }
+    }
+    function onStateChange(e) {
+      if (e.data === YT.PlayerState.ENDED) { 
+        if (updateTimer) clearInterval(updateTimer);
+        try { 
+            player.cueVideoById(player.getVideoData().video_id);
+        } catch (error) { 
+            console.warn('Player stopping error:', error); 
+        }
+        controlsEl.style.display = 'none';
+        finishedEl.style.display = 'grid';
+      }
+    }
+    
+    addEventListener('contextmenu', (e) => e.preventDefault());
+    addEventListener('keydown', (e) => {
+        const blocked = ['ArrowLeft', 'ArrowRight', 'f', 'c', 'm'];
+        if (blocked.includes(e.key.toLowerCase())) { e.preventDefault(); e.stopPropagation(); }
+    }, { passive: false });
+    
+    // =========================================================================
+    // === 3. DATA FETCHING (FROM APPS SCRIPT JSON API) ========================
+    // =========================================================================
+
+    async function fetchDataAndBuildMenu() {
+        try {
+            loadingMessageEl.innerHTML = `Loading videos...`;
+            
+            const response = await fetch(APPS_SCRIPT_API_URL);
+            const responseText = await response.text();
+            
+            let apiData;
+            try {
+                apiData = JSON.parse(responseText);
+            } catch (e) {
+                throw new Error(`Invalid JSON response. Raw output: ${responseText.substring(0, 200)}...`);
+            }
+
+            if (apiData.error) {
+                throw new Error(`Apps Script Error: ${apiData.error}`);
+            }
+
+            VIDEO_DATA = apiData; 
+
+            if (VIDEO_DATA.length > 0) {
+                loadingMessageEl.style.display = 'none';
+                menuListEl.style.display = 'block';
+                
+                const checkReady = setInterval(() => {
+                    if (isPlayerReady) {
+                        clearInterval(checkReady);
+                        // Find the first video ID to initialize the player
+                        const firstVideoId = VIDEO_DATA[0].categories[0].videos[0].id;
+                        initializePlayer(firstVideoId);
+                        renderMenu();
+                        
+                        // Default UI state: Open the first Teacher and Category
+                        const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
+                        const firstTeacherContent = firstTeacherHeader.nextElementSibling;
+                        toggleCollapse(firstTeacherHeader, firstTeacherContent);
+                        
+                        const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
+                        if(firstCategoryHeader) {
+                            // Automatically open the flyout for the first category
+                            handleCategoryClick({currentTarget: firstCategoryHeader});
+                            // Highlight the first category header
+                            firstCategoryHeader.classList.add('active'); 
+                        }
+                    }
+                }, 100);
+
+            } else {
+                 loadingMessageEl.textContent = 'Error: No structured video data returned from API. Check the Apps Script logs.';
+            }
+
+        } catch (error) {
+            console.error('Error fetching or processing data:', error);
+            loadingMessageEl.innerHTML = `
+                <p style="color:red; font-weight:bold;">FATAL FETCH ERROR:</p>
+                <p>An error occurred: ${error.message || 'Unknown network error'}</p>
+                <p>Please ensure the Apps Script is deployed and configured correctly.</p>
+            `;
+        }
+    }
+    
+    // =========================================================================
+    // === 4. MENU GENERATION & BEHAVIOR =======================================
+    // =========================================================================
+
+    function renderMenu() {
+        menuListEl.innerHTML = ''; 
+        
+        VIDEO_DATA.forEach(teacherItem => {
+            const teacherHeader = document.createElement('div');
+            teacherHeader.className = 'teacher-header';
+            teacherHeader.textContent = teacherItem.teacher;
+            
+            const teacherContent = document.createElement('div');
+            teacherContent.className = 'collapsible-content teacher-content';
+
+            const categoryUl = document.createElement('ul');
+            categoryUl.classList.add('category-list');
+            
+            teacherItem.categories.forEach(categoryItem => {
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'collapsible-header';
+                categoryHeader.textContent = categoryItem.name;
+                categoryHeader.dataset.videos = JSON.stringify(categoryItem.videos); // Store videos for flyout
+                
+                // Attach click handler to open flyout
+                categoryHeader.addEventListener('click', handleCategoryClick);
+
+                const categoryLi = document.createElement('li');
+                categoryLi.appendChild(categoryHeader);
+                categoryUl.appendChild(categoryLi);
+            });
+            
+            teacherContent.appendChild(categoryUl);
+            teacherHeader.addEventListener('click', (e) => {
+                 // Teacher click should toggle collapse
+                 toggleCollapse(teacherHeader, teacherContent);
+                 e.stopPropagation(); 
+            });
+
+            const teacherLi = document.createElement('li');
+            teacherLi.appendChild(teacherHeader);
+            teacherLi.appendChild(teacherContent);
+            menuListEl.appendChild(teacherLi);
+        });
+    }
+    
+    function toggleCollapse(headerEl, contentEl) {
+        if (!contentEl) return;
+        
+        if (headerEl.classList.contains('open')) {
+            contentEl.style.maxHeight = 0;
+            headerEl.classList.remove('open');
+        } else {
+            // Set max height dynamically to allow the CSS transition to work
+            contentEl.style.maxHeight = contentEl.scrollHeight + "px";
+            headerEl.classList.add('open');
+            // Ensure parent collapsing elements are also fully expanded
+            updateParentMaxHeight(headerEl);
+        }
+    }
+    
+    function updateParentMaxHeight(el) {
+        let currentEl = el.parentElement;
+        while (currentEl && currentEl.classList.contains('collapsible-content')) {
+            // Check for previous sibling to be the header before updating max height
+            if (currentEl.previousElementSibling && currentEl.previousElementSibling.classList.contains('teacher-header')) {
+                currentEl.style.maxHeight = currentEl.scrollHeight + 'px';
+            }
+            currentEl = currentEl.parentElement;
+        }
+    }
+
+    function handleCategoryClick(e) {
+        e.stopPropagation();
+        const headerEl = e.currentTarget;
+        const videos = JSON.parse(headerEl.dataset.videos);
+        const categoryName = headerEl.textContent.trim();
+
+        // 1. Update flyout header
+        flyoutHeaderEl.textContent = categoryName;
+        flyoutListEl.innerHTML = '';
+        
+        // 2. Populate flyout with videos
+        videos.forEach(videoItem => {
+            const videoLi = document.createElement('li');
+            videoLi.textContent = videoItem.title;
+            videoLi.dataset.videoId = videoItem.id;
+            videoLi.addEventListener('click', handleVideoClick);
+            flyoutListEl.appendChild(videoLi);
+        });
+
+        // 3. Highlight the active category and remove others
+        document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
+        headerEl.classList.add('active');
+
+        // 4. Show the flyout
+        flyoutEl.style.display = 'block';
+    }
+
+    function handleVideoClick(e) {
+        const newVideoId = e.currentTarget.dataset.videoId;
+        player.cueVideoById(newVideoId);
+        
+        finishedEl.style.display = 'none';
+        controlsEl.style.display = 'flex';
+        playPauseBtn.textContent = '▶'; 
+        seekRange.value = 0;
+        
+        // Update selection styling within the flyout
+        document.querySelectorAll('#flyoutList li').forEach(li => {
+            li.classList.remove('selected');
+        });
+        e.currentTarget.classList.add('selected');
+
+        // 5. Hide the flyout after selection
+        flyoutEl.style.display = 'none';
+    }
+    
+    // Hide the flyout if user clicks outside of the menu or player area
+    document.addEventListener('click', (e) => {
+        const isClickInsideFlyout = flyoutEl.contains(e.target);
+        const isClickInsideSidebar = document.getElementById('sidebar').contains(e.target);
+        
+        if (flyoutEl.style.display !== 'none' && !isClickInsideFlyout && !isClickInsideSidebar) {
+            flyoutEl.style.display = 'none';
+            // Also remove active state from category header
+            document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
+        }
+    });
+
+
+    // Start the data fetching process
+    fetchDataAndBuildMenu();
+
+  </script>
+</body>
+</html>
