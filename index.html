@@ -10,8 +10,8 @@
         --w: 960px; 
         --menu-width: 300px; 
         --flyout-width: 350px; /* Width for the video list flyout */
-        --color-accent: #BEA876; /* NEW: Gold/Accent Color for Teachers/Headers */
-        --color-primary-bg: #283891; /* NEW: Dark Blue for Sidebar/Flyout Background */
+        --color-accent: #BEA876; /* Gold/Accent Color for Teachers/Headers */
+        --color-primary-bg: #283891; /* Dark Blue for Sidebar/Flyout Background */
         --color-bg-dark: #0b0d10;
         --color-text-white: #FFFFFF; /* White for Categories/Videos */
         --color-dark-hover: #3a4a9f; /* Slightly lighter shade of the background for hover state */
@@ -43,13 +43,33 @@
         position: relative; 
         z-index: 10;
     }
-    #sidebar h3 { 
-        margin-top: 0; 
-        color: var(--color-accent); /* Use new gold accent color */
-        text-decoration: underline; /* Underline the title */
-        padding-bottom: 5px;
+
+    /* Header container now only holds the refresh button */
+    #sidebarHeader {
+        display: flex;
+        justify-content: flex-end; /* Push button to the right */
+        align-items: center;
+        margin-bottom: 10px; /* Add some space above the loading message/menu */
     }
+    
     #loadingMessage { padding: 10px; font-size: 0.9em; }
+
+    /* Refresh Button Style */
+    #refreshBtn {
+        background: var(--color-dark-hover);
+        color: var(--color-text-white);
+        border: none;
+        padding: 5px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1em;
+        line-height: 1;
+        transition: background-color 0.2s;
+    }
+    #refreshBtn:hover {
+        background: var(--color-accent);
+        color: var(--color-primary-bg);
+    }
     
     /* Menu List Styles */
     .teacher-list, .category-list { list-style: none; padding: 0; margin: 0; }
@@ -144,7 +164,19 @@
     /* 3. Player & Controls */
     .wrap { position: relative; width: 100%; aspect-ratio: 16/9; background:#000; border-radius: 12px 12px 0 0; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
     #player { width: 100%; height: 100%; pointer-events: none; }   
-    .controls { width: 100%; background: var(--color-primary-bg); padding: 10px 15px; display: flex; align-items: center; gap: 15px; box-shadow: 0 8px 24px rgba(0,0,0,.4); border-radius: 0 0 12px 12px; }
+    
+    /* Control bar styling updated for time display */
+    .controls { 
+        width: 100%; 
+        background: var(--color-primary-bg); 
+        padding: 10px 15px; 
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+        box-shadow: 0 8px 24px rgba(0,0,0,.4); 
+        border-radius: 0 0 12px 12px; 
+        font-size: 0.9em; /* Smaller font for time */
+    }
     .btn { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
     #seekRange { flex-grow: 1; }
     input[type="range"] { -webkit-appearance: none; appearance: none; height: 5px; background: #555; cursor: pointer; border-radius: 5px;}
@@ -157,7 +189,12 @@
     
     <!-- LEFT COLUMN: DYNAMIC MENU SIDEBAR (Teacher -> Category) -->
     <div id="sidebar">
-        <h3>Video Library</h3>
+        <!-- New sidebar header container for title and refresh button -->
+        <div id="sidebarHeader">
+            <!-- Video Library title removed here -->
+            <button id="refreshBtn" title="Refresh Video List">↻</button>
+        </div>
+        
         <p id="loadingMessage">Loading videos...</p>
         <ul class="teacher-list" id="menuList" style="display:none">
             <!-- Menu items will be generated here -->
@@ -184,10 +221,12 @@
             </div>
         </div>
 
-        <!-- Custom Control Bar -->
+        <!-- Custom Control Bar with Time Display -->
         <div class="controls" id="controls" style="display:none;">
             <button class="btn" id="playPauseBtn">▶</button>
+            <span id="currentTimeSpan">0:00</span>
             <input type="range" id="seekRange" min="0" max="100" value="0">
+            <span id="durationSpan">0:00</span>
             <input type="range" id="volumeRange" min="0" max="100" value="100" style="width: 80px;">
         </div>
     </div>
@@ -225,6 +264,26 @@
     const flyoutListEl = document.getElementById('flyoutList');
     const flyoutHeaderEl = document.getElementById('flyoutHeader');
     
+    // New element for the refresh button
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    // New elements for time display
+    const currentTimeSpan = document.getElementById('currentTimeSpan');
+    const durationSpan = document.getElementById('durationSpan');
+    
+    /**
+     * Helper function to format seconds into M:SS string.
+     * @param {number} seconds 
+     * @returns {string}
+     */
+    function formatTime(seconds) {
+        if (isNaN(seconds) || seconds < 0) return '0:00';
+        const minutes = Math.floor(seconds / 60);
+        // Ensure seconds are always two digits, e.g., 05 instead of 5
+        const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return `${minutes}:${remainingSeconds}`;
+    }
+
     // Player functions
     window.onYouTubeIframeAPIReady = function () { isPlayerReady = true; };
 
@@ -252,6 +311,11 @@
     function onReady(e) {
       controlsEl.style.display = 'flex';
       player.setVolume(100);
+      
+      // Set initial duration time display
+      const duration = player.getDuration();
+      durationSpan.textContent = formatTime(duration);
+
       playPauseBtn.addEventListener('click', togglePlayPause);
       volumeRange.addEventListener('input', setVolume);
       seekRange.addEventListener('change', seekVideo);
@@ -283,12 +347,20 @@
             playPauseBtn.textContent = '⏸';
         }
     }
+    
     function updatePlayerState() {
         if (player && player.getPlayerState) {
             const state = player.getPlayerState();
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            
+            // Update time displays
+            currentTimeSpan.textContent = formatTime(currentTime);
+            if (duration > 0 && durationSpan.textContent === '0:00') {
+                durationSpan.textContent = formatTime(duration);
+            }
+
             if (state === YT.PlayerState.PLAYING) {
-                const currentTime = player.getCurrentTime();
-                const duration = player.getDuration();
                 const percentage = (currentTime / duration) * 100;
                 seekRange.value = percentage;
                 playPauseBtn.textContent = '⏸';
@@ -297,6 +369,7 @@
             }
         }
     }
+    
     function onStateChange(e) {
       if (e.data === YT.PlayerState.ENDED) { 
         if (updateTimer) clearInterval(updateTimer);
@@ -322,6 +395,10 @@
 
     async function fetchDataAndBuildMenu() {
         try {
+            // Reset UI state before fetching data
+            menuListEl.style.display = 'none';
+            flyoutEl.style.display = 'none';
+            loadingMessageEl.style.display = 'block';
             loadingMessageEl.innerHTML = `Loading videos...`;
             
             const response = await fetch(APPS_SCRIPT_API_URL);
@@ -511,6 +588,13 @@
         }
     });
 
+
+    // Attach listener for the new refresh button
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            fetchDataAndBuildMenu();
+        });
+    }
 
     // Start the data fetching process
     fetchDataAndBuildMenu();
