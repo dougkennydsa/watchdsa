@@ -177,11 +177,72 @@
         border-radius: 0 0 12px 12px; 
         font-size: 0.9em; /* Smaller font for time */
     }
+    
+    /* Fullscreen Button Styling */
+    #fullscreenBtn {
+        background-color: var(--color-accent); 
+        color: var(--color-primary-bg); 
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 0.9em;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: opacity 0.2s;
+        flex-shrink: 0; /* Prevents button from shrinking in the flex container */
+        margin-left: auto; /* Pushes the button to the far right */
+    }
+    #fullscreenBtn:hover {
+        opacity: 0.9;
+    }
+
     .btn { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
     #seekRange { flex-grow: 1; }
     input[type="range"] { -webkit-appearance: none; appearance: none; height: 5px; background: #555; cursor: pointer; border-radius: 5px;}
     input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent); cursor: pointer; }
     .finished { position:absolute; inset:0; display:grid; place-items:center; background:var(--color-bg-dark); text-align:center; padding:2rem; }
+
+    /* --- FULLSCREEN STYLES (Applies when content-area enters fullscreen) --- */
+    .content-area:fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        z-index: 21; /* Higher than flyout z-index: 20 */
+        background-color: var(--color-bg-dark); 
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+    }
+    
+    /* Video container must occupy maximum space but maintain aspect ratio */
+    .content-area:fullscreen .wrap {
+        width: 100%;
+        max-width: 100%;
+        flex-grow: 1; 
+        /* The key to fix clipping: use object-fit equivalent for the container */
+        max-height: calc(100vh - 60px); /* Account for controls height */
+        aspect-ratio: 16/9; /* Maintain ratio */
+        object-fit: contain; /* Ensure the video scales down if height is limited */
+        margin: auto; /* Center the video block */
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .content-area:fullscreen .controls {
+        flex-shrink: 0;
+        border-radius: 0;
+        width: 100%; /* Ensure controls span full width in fullscreen */
+    }
+    .content-area:fullscreen .finished {
+        width: 100%;
+        height: 100%;
+        padding-top: 50px; 
+    }
+    /* ---------------------------------------------------------------------- */
   </style>
 </head>
 <body>
@@ -221,13 +282,14 @@
             </div>
         </div>
 
-        <!-- Custom Control Bar with Time Display -->
+        <!-- Custom Control Bar with Time Display and Fullscreen Button -->
         <div class="controls" id="controls" style="display:none;">
             <button class="btn" id="playPauseBtn">▶</button>
             <span id="currentTimeSpan">0:00</span>
             <input type="range" id="seekRange" min="0" max="100" value="0">
             <span id="durationSpan">0:00</span>
             <input type="range" id="volumeRange" min="0" max="100" value="100" style="width: 80px;">
+            <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">FULLSCREEN</button> 
         </div>
     </div>
   </div>
@@ -267,9 +329,11 @@
     // New element for the refresh button
     const refreshBtn = document.getElementById('refreshBtn');
 
-    // New elements for time display
+    // New elements for time display and fullscreen
     const currentTimeSpan = document.getElementById('currentTimeSpan');
     const durationSpan = document.getElementById('durationSpan');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const contentAreaEl = document.querySelector('.content-area');
     
     /**
      * Helper function to format seconds into M:SS string.
@@ -319,6 +383,12 @@
       playPauseBtn.addEventListener('click', togglePlayPause);
       volumeRange.addEventListener('input', setVolume);
       seekRange.addEventListener('change', seekVideo);
+
+      // --- Fullscreen Logic Initialization ---
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+      // Listen for the browser's fullscreen event to update the button icon
+      document.addEventListener('fullscreenchange', handleFullscreenChange); 
+      // ---------------------------------------
       
       if (updateTimer) clearInterval(updateTimer); 
       updateTimer = setInterval(updatePlayerState, 1000);
@@ -369,6 +439,36 @@
             }
         }
     }
+
+    // --- New Fullscreen Functions ---
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            // Enter fullscreen mode on the content-area element
+            if (contentAreaEl.requestFullscreen) {
+                contentAreaEl.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            }
+        } else {
+            // Exit fullscreen mode
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    function handleFullscreenChange() {
+        if (document.fullscreenElement) {
+            // In fullscreen mode: show EXIT FULLSCREEN
+            fullscreenBtn.textContent = 'EXIT FULLSCREEN'; 
+        } else {
+            // Not in fullscreen mode: show FULLSCREEN
+            fullscreenBtn.textContent = 'FULLSCREEN'; 
+        }
+    }
+    // --------------------------------
+
     
     function onStateChange(e) {
       if (e.data === YT.PlayerState.ENDED) { 
@@ -385,7 +485,9 @@
     
     addEventListener('contextmenu', (e) => e.preventDefault());
     addEventListener('keydown', (e) => {
-        const blocked = ['ArrowLeft', 'ArrowRight', 'f', 'c', 'm'];
+        // Allow the native F11 key (or F key) for fullscreen if user prefers that, 
+        // but block other native YouTube shortcuts
+        const blocked = ['ArrowLeft', 'ArrowRight', 'c', 'm'];
         if (blocked.includes(e.key.toLowerCase())) { e.preventDefault(); e.stopPropagation(); }
     }, { passive: false });
     
