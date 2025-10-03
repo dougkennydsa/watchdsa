@@ -139,6 +139,8 @@
         display: none; 
         z-index: 20;
     }
+    
+    /* Updated Flyout Header to include the close button */
     #flyoutHeader { 
         font-size: 1.3em; 
         font-weight: bold; 
@@ -146,7 +148,26 @@
         margin-bottom: 10px;
         padding-bottom: 5px;
         border-bottom: 1px solid var(--color-dark-hover);
+        display: flex; /* Enable flex for alignment */
+        justify-content: space-between; /* Space out title and button */
+        align-items: center;
     }
+    
+    /* Style for the new close button */
+    #closeFlyoutBtn {
+        background: none;
+        border: none;
+        color: var(--color-accent);
+        font-size: 1.5em; 
+        cursor: pointer;
+        padding: 0 5px;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+    #closeFlyoutBtn:hover {
+        color: var(--color-text-white);
+    }
+    
     .video-list { list-style: none; padding: 0; margin: 0; }
     .video-list li {
         padding: 8px 10px; 
@@ -264,7 +285,11 @@
     
     <!-- MIDDLE COLUMN: VIDEO LIST FLYOUT (New Element) -->
     <div id="videoFlyout" style="display:none;">
-        <div id="flyoutHeader">Videos in Category</div>
+        <div id="flyoutHeader">
+            <!-- Header text is now in a span for separate control from button -->
+            <span id="flyoutHeaderText">Videos in Category</span>
+            <button id="closeFlyoutBtn" title="Close Video List">←</button>
+        </div>
         <ul class="video-list" id="flyoutList">
             <!-- Video list will be generated here on category click -->
         </ul>
@@ -313,6 +338,7 @@
     let player;
     let updateTimer; 
     let isPlayerReady = false;
+    let activeCategoryHeader = null; // New global to track the currently active category header
 
     // DOM Elements
     const finishedEl = document.getElementById('finished');
@@ -323,13 +349,12 @@
     const menuListEl = document.getElementById('menuList');
     const loadingMessageEl = document.getElementById('loadingMessage');
     const flyoutEl = document.getElementById('videoFlyout');
+    const flyoutHeaderTextEl = document.getElementById('flyoutHeaderText'); // Target the span for text
     const flyoutListEl = document.getElementById('flyoutList');
-    const flyoutHeaderEl = document.getElementById('flyoutHeader');
+    const closeFlyoutBtn = document.getElementById('closeFlyoutBtn'); // New button element
     
-    // New element for the refresh button
+    // Existing elements
     const refreshBtn = document.getElementById('refreshBtn');
-
-    // New elements for time display and fullscreen
     const currentTimeSpan = document.getElementById('currentTimeSpan');
     const durationSpan = document.getElementById('durationSpan');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
@@ -440,8 +465,7 @@
         }
     }
 
-    // --- New Fullscreen Functions ---
-
+    // --- Fullscreen Functions ---
     function toggleFullscreen() {
         if (!document.fullscreenElement) {
             // Enter fullscreen mode on the content-area element
@@ -541,7 +565,7 @@
                             // Automatically open the flyout for the first category
                             handleCategoryClick({currentTarget: firstCategoryHeader});
                             // Highlight the first category header
-                            firstCategoryHeader.classList.add('active'); 
+                            // This is handled inside handleCategoryClick now
                         }
                     }
                 }, 100);
@@ -631,6 +655,18 @@
             currentEl = currentEl.parentElement;
         }
     }
+    
+    /**
+     * Hides the flyout menu and removes the active state from the category header.
+     */
+    function closeFlyout() {
+        flyoutEl.style.display = 'none';
+        // Remove highlight from the previously active category
+        if (activeCategoryHeader) {
+            activeCategoryHeader.classList.remove('active');
+            activeCategoryHeader = null;
+        }
+    }
 
     function handleCategoryClick(e) {
         e.stopPropagation();
@@ -639,7 +675,7 @@
         const categoryName = headerEl.textContent.trim();
 
         // 1. Update flyout header
-        flyoutHeaderEl.textContent = categoryName;
+        flyoutHeaderTextEl.textContent = categoryName;
         flyoutListEl.innerHTML = '';
         
         // 2. Populate flyout with videos
@@ -651,9 +687,10 @@
             flyoutListEl.appendChild(videoLi);
         });
 
-        // 3. Highlight the active category and remove others
+        // 3. Highlight the active category and store reference
         document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
         headerEl.classList.add('active');
+        activeCategoryHeader = headerEl; // Store for later use by closeFlyout
 
         // 4. Show the flyout
         flyoutEl.style.display = 'block';
@@ -674,8 +711,8 @@
         });
         e.currentTarget.classList.add('selected');
 
-        // 5. Hide the flyout after selection
-        flyoutEl.style.display = 'none';
+        // 5. Hide the flyout after selection (using the new close function)
+        closeFlyout();
     }
     
     // Hide the flyout if user clicks outside of the menu or player area
@@ -684,9 +721,7 @@
         const isClickInsideSidebar = document.getElementById('sidebar').contains(e.target);
         
         if (flyoutEl.style.display !== 'none' && !isClickInsideFlyout && !isClickInsideSidebar) {
-            flyoutEl.style.display = 'none';
-            // Also remove active state from category header
-            document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
+            closeFlyout();
         }
     });
 
@@ -697,6 +732,12 @@
             fetchDataAndBuildMenu();
         });
     }
+
+    // Attach listener for the new close flyout button
+    if (closeFlyoutBtn) {
+        closeFlyoutBtn.addEventListener('click', closeFlyout);
+    }
+
 
     // Start the data fetching process
     fetchDataAndBuildMenu();
