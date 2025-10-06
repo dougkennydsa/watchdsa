@@ -1,0 +1,58 @@
+[
+  {
+    "teacher": "Ms. Alvarez",
+    "categories": [
+      {
+        "name": "Algebra I",
+        "videos": [
+          { "title": "Intro to Linear Equations", "id": "dQw4w9WgXcQ" },
+          { "title": "Slope-Intercept Form",     "id": "3JZ_D3ELwOQ" },
+          { "title": "Graphing Basics",          "id": "l482T0yNkeo" }
+        ]
+      },
+      {
+        "name": "Algebra II",
+        "videos": [
+          { "title": "Quadratics Overview",      "id": "kXYiU_JCYtU" },
+          { "title": "Completing the Square",    "id": "9bZkp7q19f0" }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Mr. Chen",
+    "categories": [
+      {
+        "name": "Geometry",
+        "videos": [
+          { "title": "Triangles & Angles",       "id": "V-_O7nl0Ii0" },
+          { "title": "Similarity Basics",        "id": "fJ9rUzIMcZQ" }
+        ]
+      },
+      {
+        "name": "Proofs",
+        "videos": [
+          { "title": "Two-Column Proofs",        "id": "eY52Zsg-KVI" }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Mrs. Rivera",
+    "categories": [
+      {
+        "name": "Pre-Algebra",
+        "videos": [
+          { "title": "Order of Operations",      "id": "2vjPBrBU-TM" },
+          { "title": "Fractions Review",         "id": "hTWKbfoikeg" }
+        ]
+      },
+      {
+        "name": "Number Sense",
+        "videos": [
+          { "title": "Integers & Absolute Value","id": "L_jWHffIx5E" }
+        ]
+      }
+    ]
+  }
+]
