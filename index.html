@@ -11,29 +11,25 @@
     .container{display:flex;width:calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px);max-width:100%;gap:20px;position:relative}
     .content-area{flex-grow:1}
     #sidebar{width:var(--menu-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.3);max-height:calc(100vh - 40px);overflow-y:auto;position:relative;z-index:10}
-    #sidebarLogo{width:100%;height:auto;display:block;margin-bottom:15px;border-radius:8px}
-    #sidebar::-webkit-scrollbar{width:8px}
-    #sidebar::-webkit-scrollbar-track{background:var(--color-dark-hover);border-radius:4px}
-    #sidebar::-webkit-scrollbar-thumb{background:var(--color-accent);border-radius:4px}
-    #sidebar::-webkit-scrollbar-thumb:hover{background:#d4c090}
+    #sidebarHeader{display:flex;justify-content:flex-end;align-items:center;margin-bottom:10px}
+    #refreshBtn{background:var(--color-dark-hover);color:var(--color-text-white);border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:1em;line-height:1;transition:background-color .2s}
+    #refreshBtn:hover{background:var(--color-accent);color:var(--color-primary-bg)}
     #loadingMessage{padding:10px;font-size:.9em}
     .teacher-list,.category-list{list-style:none;padding:0;margin:0}
-    .teacher-header{font-weight:700;font-size:1.25em;color:var(--color-accent);padding:10px 5px;margin-top:10px;cursor:pointer;user-select:none;display:flex;justify-content:space-between;border-bottom:2px solid var(--color-dark-hover)}
-    .teacher-header::after{content:'+';font-size:1.2em;transition:transform .3s}
+    .teacher-header{font-weight:700;font-size:1.1em;color:var(--color-accent);padding:10px 5px;margin-top:10px;cursor:pointer;user-select:none;display:flex;justify-content:space-between;border-bottom:2px solid var(--color-dark-hover)}
+    .teacher-header::after{content:'+';font-size:1.1em;transition:transform .3s}
     .teacher-header.open::after{content:'-'}
     .collapsible-header{padding:8px 5px;margin-bottom:5px;color:var(--color-text-white);font-size:1em;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-dark-hover);transition:background-color .2s;padding-left:25px}
     .collapsible-header:hover{background-color:var(--color-dark-hover)}
-    .collapsible-header::after{content:'▸';font-size:1.1em;transition:transform .3s;margin-left:10px}
     .collapsible-header.active{background-color:var(--color-accent);color:var(--color-primary-bg)}
-    .collapsible-content{max-height:0;overflow:hidden;transition:max-height .4s ease-in-out}
-    #videoFlyout{position:absolute;top:0;width:var(--flyout-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:8px 8px 20px rgba(0,0,0,.5);max-height:calc(100vh - 40px);overflow-y:auto;display:none;z-index:20;opacity:0;transform:translateX(20px);transition:opacity .2s ease-out,transform .2s ease-out}
+    .collapsible-content{max-height:0;overflow:hidden;transition:max-height .25s ease}
+    #videoFlyout{position:absolute;top:0;left:calc(var(--menu-width) + 20px);width:var(--flyout-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:8px 8px 20px rgba(0,0,0,.5);max-height:calc(100vh - 40px);overflow-y:auto;display:none;z-index:20;opacity:0;transform:translateX(20px);transition:opacity .2s ease,transform .2s ease}
     #videoFlyout.show{opacity:1;transform:translateX(0)}
-    #flyoutBreadcrumb{font-size:.85em;color:#aaa;font-weight:400;margin-bottom:5px;letter-spacing:.02em}
-    #flyoutHeader{font-size:1.3em;font-weight:700;color:var(--color-accent);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--color-dark-hover);display:flex;justify-content:space-between;align-items:center}
+    #flyoutHeader{font-size:1.15em;font-weight:700;color:var(--color-accent);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--color-dark-hover);display:flex;justify-content:space-between;align-items:center}
     #closeFlyoutBtn{background:none;border:none;color:var(--color-accent);font-size:1.5em;cursor:pointer;padding:0 5px;line-height:1;transition:color .2s}
     #closeFlyoutBtn:hover{color:var(--color-text-white)}
     .video-list{list-style:none;padding:0;margin:0}
-    .video-list li{padding:8px 10px;cursor:pointer;border-left:3px solid transparent;transition:background-color .2s,border-left-color .2s;font-size:.95em;line-height:1.3;white-space:normal;color:var(--color-text-white)}
+    .video-list li{padding:8px 10px;cursor:pointer;border-left:3px solid transparent;transition:background-color .2s,border-left-color .2s;font-size:.95em;line-height:1.3;color:var(--color-text-white)}
     .video-list li.selected{border-left-color:var(--color-accent);font-weight:700}
     .video-list li:hover{background-color:var(--color-dark-hover)}
     .wrap{position:relative;width:100%;max-width:var(--w);aspect-ratio:16/9;background:#000;border-radius:12px 12px 0 0;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -50,20 +46,24 @@
     .content-area:fullscreen .wrap{width:100%;max-width:100%;flex-grow:1;max-height:calc(100vh - 60px);aspect-ratio:16/9;object-fit:contain;margin:auto;border-radius:0;box-shadow:none}
     .content-area:fullscreen .controls{flex-shrink:0;border-radius:0;width:100%}
     .content-area:fullscreen .finished{width:100%;height:100%;padding-top:50px}
+    /* tiny banner if YT API blocked */
+    #ytNotice{display:none;margin:8px 0 0 0;font-size:.85em;color:#ffd5d5}
   </style>
 </head>
 <body>
   <div class="container">
     <!-- LEFT: Sidebar -->
     <div id="sidebar">
-      <img src="./sharkTube_full.png" alt="SharkTube" id="sidebarLogo">
+      <div id="sidebarHeader">
+        <button id="refreshBtn" title="Refresh Video List">↻</button>
+      </div>
       <p id="loadingMessage">Loading videos...</p>
       <ul class="teacher-list" id="menuList" style="display:none"></ul>
+      <p id="ytNotice">YouTube player blocked by network filter — browsing list still works.</p>
     </div>
 
     <!-- MIDDLE: Flyout -->
     <div id="videoFlyout" style="display:none;">
-      <div id="flyoutBreadcrumb"></div>
       <div id="flyoutHeader">
         <span id="flyoutHeaderText">Videos in Category</span>
         <button id="closeFlyoutBtn" title="Close Video List">←</button>
@@ -114,7 +114,6 @@
     const menuListEl = document.getElementById('menuList');
     const loadingMessageEl = document.getElementById('loadingMessage');
     const flyoutEl = document.getElementById('videoFlyout');
-    const flyoutBreadcrumbEl = document.getElementById('flyoutBreadcrumb');
     const flyoutHeaderTextEl = document.getElementById('flyoutHeaderText');
     const flyoutListEl = document.getElementById('flyoutList');
     const closeFlyoutBtn = document.getElementById('closeFlyoutBtn');
@@ -122,6 +121,8 @@
     const durationSpan = document.getElementById('durationSpan');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const contentAreaEl = document.querySelector('.content-area');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const ytNotice = document.getElementById('ytNotice');
 
     // -------------------- Utils ---------------------
     function formatTime(s){ if(isNaN(s)||s<0) return '0:00'; const m=Math.floor(s/60); const ss=String(Math.floor(s%60)).padStart(2,'0'); return `${m}:${ss}`; }
@@ -151,7 +152,7 @@
       volumeRange.addEventListener('input', () => player.setVolume(parseInt(volumeRange.value,10)));
       seekRange.addEventListener('change', () => {
         const d = player.getDuration(); player.seekTo((seekRange.value/100)*d,true);
-        if (player.getPlayerState() !== YT.PlayerState.PLAYING){ player.playVideo(); playPauseBtn.textContent='⸫'; }
+        if (player.getPlayerState() !== YT.PlayerState.PLAYING){ player.playVideo(); playPauseBtn.textContent='⏸'; }
       });
       fullscreenBtn.addEventListener('click', toggleFullscreen);
       document.addEventListener('fullscreenchange', handleFullscreenChange);
@@ -172,10 +173,10 @@
       const state = player.getPlayerState(), t = player.getCurrentTime(), d = player.getDuration();
       currentTimeSpan.textContent = formatTime(t);
       if (d > 0 && durationSpan.textContent === '0:00') durationSpan.textContent = formatTime(d);
-      if (state === YT.PlayerState.PLAYING){ seekRange.value = (t/d)*100; playPauseBtn.textContent='⸫'; }
+      if (state === YT.PlayerState.PLAYING){ seekRange.value = (t/d)*100; playPauseBtn.textContent='⏸'; }
       else if (state === YT.PlayerState.PAUSED){ playPauseBtn.textContent='▶'; }
     }
-    function togglePlayPause(){ const s = player.getPlayerState(); if (s===YT.PlayerState.PLAYING){ player.pauseVideo(); playPauseBtn.textContent='▶'; } else { player.playVideo(); playPauseBtn.textContent='⸫'; } }
+    function togglePlayPause(){ const s = player.getPlayerState(); if (s===YT.PlayerState.PLAYING){ player.pauseVideo(); playPauseBtn.textContent='▶'; } else { player.playVideo(); playPauseBtn.textContent='⏸'; } }
     function toggleFullscreen(){ if (!document.fullscreenElement){ contentAreaEl.requestFullscreen?.().catch(err=>console.error('Fullscreen error:',err)); } else { document.exitFullscreen?.(); } }
     function handleFullscreenChange(){ fullscreenBtn.textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'FULLSCREEN'; }
 
@@ -187,20 +188,25 @@
       loadingMessageEl.textContent='Loading videos...';
 
       try{
-        // cache-buster so we always pull the latest artifact written by Actions
-        const res = await fetch(`${JSON_URL}?t=${Date.now()}`, { cache:'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const url = `${JSON_URL}?t=${Date.now()}`; // cache-buster
+        console.log('[LOAD] fetching', url);
+        const res = await fetch(url, { cache:'no-store' });
+        if (!res.ok) throw new Error(`videos.json HTTP ${res.status}`);
         const data = await res.json();
-        if (!Array.isArray(data) || !data.length) throw new Error('videos.json is empty or malformed');
+        if (!Array.isArray(data) || !data.length) throw new Error('videos.json empty or wrong shape');
+
+        const firstId = data?.[0]?.categories?.[0]?.videos?.[0]?.id;
+        if (!firstId) throw new Error('videos.json missing first video at [0].categories[0].videos[0].id');
 
         VIDEO_DATA = data;
+        console.log('[LOAD] videos.json ok:', VIDEO_DATA.length, 'teachers');
         renderMenu();
+
         loadingMessageEl.style.display='none';
         menuListEl.style.display='block';
 
-        // Auto-open first teacher/category; init player if possible
-        const firstId = VIDEO_DATA[0]?.categories?.[0]?.videos?.[0]?.id;
-        pendingVideoId = firstId || null;
+        // open first section and prep player
+        pendingVideoId = firstId;
         const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
         if (firstTeacherHeader){
           const firstTeacherContent = firstTeacherHeader.nextElementSibling;
@@ -210,11 +216,10 @@
         }
         if (isPlayerReady && firstId) initializePlayer(firstId);
 
-        // Soft notice if YouTube API is blocked
-        setTimeout(()=>{ if (!isPlayerReady) console.warn('YouTube API unavailable – menu usable, player offline.'); }, 3000);
+        setTimeout(()=>{ if (!isPlayerReady) ytNotice.style.display='block'; }, 2500);
       }catch(err){
-        console.error('FATAL: failed to load videos.json', err);
-        loadingMessageEl.innerHTML = `<p style="color:#ff6b6b;font-weight:bold">Could not load videos.json</p><p>${err.message}</p>`;
+        console.error('[LOAD] FATAL:', err);
+        loadingMessageEl.innerHTML = `<b style="color:#ff6b6b">Could not load videos.json</b><br>${String(err.message || err)}`;
       }
     }
 
@@ -237,7 +242,6 @@
           categoryHeader.className='collapsible-header';
           categoryHeader.textContent = categoryItem.name;
           categoryHeader.dataset.videos = JSON.stringify(categoryItem.videos);
-          categoryHeader.dataset.teacher = teacherItem.teacher;
           categoryHeader.addEventListener('click', handleCategoryClick);
 
           const li = document.createElement('li');
@@ -257,20 +261,7 @@
 
     function toggleCollapse(headerEl, contentEl){
       if (!contentEl) return;
-      const wasOpen = headerEl.classList.contains('open');
-      
-      // Auto-collapse all sibling teacher sections
-      if (!wasOpen && headerEl.classList.contains('teacher-header')){
-        const allTeacherHeaders = menuListEl.querySelectorAll('.teacher-header.open');
-        allTeacherHeaders.forEach(th=>{
-          if (th !== headerEl){
-            const tc = th.nextElementSibling;
-            if (tc){ tc.style.maxHeight='0'; th.classList.remove('open'); }
-          }
-        });
-      }
-      
-      if (wasOpen){ contentEl.style.maxHeight='0'; headerEl.classList.remove('open'); }
+      if (headerEl.classList.contains('open')){ contentEl.style.maxHeight=0; headerEl.classList.remove('open'); }
       else { contentEl.style.maxHeight = contentEl.scrollHeight + 'px'; headerEl.classList.add('open'); updateParentMaxHeight(headerEl); }
     }
     function updateParentMaxHeight(el){
@@ -283,7 +274,7 @@
 
     function closeFlyout(){
       flyoutEl.classList.remove('show');
-      setTimeout(()=>{ flyoutEl.style.display='none'; }, 200);
+      setTimeout(()=>{ flyoutEl.style.display='none'; }, 180);
       if (activeCategoryHeader){ activeCategoryHeader.classList.remove('active'); activeCategoryHeader=null; }
     }
 
@@ -292,9 +283,7 @@
       const headerEl = e.currentTarget;
       const videos = JSON.parse(headerEl.dataset.videos);
       const categoryName = headerEl.textContent.trim();
-      const teacherName = headerEl.dataset.teacher || '';
 
-      flyoutBreadcrumbEl.textContent = teacherName ? `${teacherName} › ${categoryName}` : categoryName;
       flyoutHeaderTextEl.textContent = categoryName;
       flyoutListEl.innerHTML = '';
 
@@ -317,14 +306,13 @@
       flyoutEl.style.top = `${headerRect.top - sidebarRect.top}px`;
       
       flyoutEl.style.display='block';
-      setTimeout(()=>{ flyoutEl.classList.add('show'); }, 10);
+      requestAnimationFrame(()=>flyoutEl.classList.add('show'));
     }
 
     function handleVideoClick(e){
       const newId = e.currentTarget.dataset.videoId;
       pendingVideoId = newId;
       if (!isPlayerReady){
-        // highlight selection; will cue when API becomes ready
         document.querySelectorAll('#flyoutList li').forEach(li=>li.classList.remove('selected'));
         e.currentTarget.classList.add('selected');
         return;
@@ -345,6 +333,7 @@
       if (flyoutEl.style.display !== 'none' && !inFlyout && !inSidebar) closeFlyout();
     });
 
+    refreshBtn?.addEventListener('click', loadLocalData);
     closeFlyoutBtn?.addEventListener('click', closeFlyout);
 
     // Boot
