@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SharkTube – Collapsible Flyout Portal</title>
+  <!-- ADDED: Content Security Policy to ensure all requests use HTTPS, which can help with some strict network setups -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
     /* 1. Reset and Base Styles */
     :root { 
@@ -519,69 +521,116 @@
     // === 3. DATA FETCHING (FROM APPS SCRIPT JSON API) ========================
     // =========================================================================
 
+    /**
+     * Fetches video data from the Google Apps Script API with a timeout.
+     * If the API fetch fails or times out (due to network blocking/security), 
+     * it falls back to loading data from the local 'videos.json' file.
+     */
     async function fetchDataAndBuildMenu() {
+        // Reset UI state before fetching data
+        menuListEl.style.display = 'none';
+        flyoutEl.style.display = 'none';
+        loadingMessageEl.style.display = 'block';
+        loadingMessageEl.innerHTML = `Loading videos...`;
+        
+        let apiData = [];
+        let isLocalFallback = false;
+        
         try {
-            // Reset UI state before fetching data
-            menuListEl.style.display = 'none';
-            flyoutEl.style.display = 'none';
-            loadingMessageEl.style.display = 'block';
-            loadingMessageEl.innerHTML = `Loading videos...`;
+            // Set up a 10-second timeout for the API call
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            // Attempt to fetch from the Apps Script API
+            let response = await fetch(APPS_SCRIPT_API_URL, {
+                method: 'GET', 
+                mode: 'cors', 
+                cache: 'no-store', 
+                credentials: 'omit', 
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId); // Clear timeout if fetch succeeds/fails quickly
             
-            const response = await fetch(APPS_SCRIPT_API_URL);
-            const responseText = await response.text();
+            let responseText = await response.text();
             
-            let apiData;
             try {
+                // Try parsing the response
                 apiData = JSON.parse(responseText);
-            } catch (e) {
-                throw new Error(`Invalid JSON response. Raw output: ${responseText.substring(0, 200)}...`);
-            }
-
-            if (apiData.error) {
-                throw new Error(`Apps Script Error: ${apiData.error}`);
-            }
-
-            VIDEO_DATA = apiData; 
-
-            if (VIDEO_DATA.length > 0) {
-                loadingMessageEl.style.display = 'none';
-                menuListEl.style.display = 'block';
                 
-                const checkReady = setInterval(() => {
-                    if (isPlayerReady) {
-                        clearInterval(checkReady);
-                        // Find the first video ID to initialize the player
-                        const firstVideoId = VIDEO_DATA[0].categories[0].videos[0].id;
-                        initializePlayer(firstVideoId);
-                        renderMenu();
-                        
-                        // Default UI state: Open the first Teacher and Category
-                        const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
-                        const firstTeacherContent = firstTeacherHeader.nextElementSibling;
-                        toggleCollapse(firstTeacherHeader, firstTeacherContent);
-                        
-                        const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
-                        if(firstCategoryHeader) {
-                            // Automatically open the flyout for the first category
-                            handleCategoryClick({currentTarget: firstCategoryHeader});
-                            // Highlight the first category header
-                            // This is handled inside handleCategoryClick now
-                        }
-                    }
-                }, 100);
-
-            } else {
-                 loadingMessageEl.textContent = 'Error: No structured video data returned from API. Check the Apps Script logs.';
+                // If the API returns an error structure, we treat it as a failure
+                if (apiData.error) {
+                    throw new Error(`Apps Script reported an error: ${apiData.error}`);
+                }
+            } catch (e) {
+                // Parsing failed or API error, try local fallback
+                console.warn("API response failed to parse as valid JSON. Attempting local fallback.", e);
+                isLocalFallback = true;
             }
 
         } catch (error) {
-            console.error('Error fetching or processing data:', error);
-            loadingMessageEl.innerHTML = `
-                <p style="color:red; font-weight:bold;">FATAL FETCH ERROR:</p>
-                <p>An error occurred: ${error.message || 'Unknown network error'}</p>
-                <p>Please ensure the Apps Script is deployed and configured correctly.</p>
-            `;
+            // Network failure, timeout, or abort error
+            console.warn("Primary API fetch failed. Attempting local fallback.", error.message);
+            isLocalFallback = true;
         }
+
+        // --- Fallback Logic ---
+        if (isLocalFallback || !Array.isArray(apiData) || apiData.length === 0) {
+            loadingMessageEl.innerHTML = `
+                <b style="color:#ff6b6b">Loading local backup...</b>
+                <br>Could not reach the live spreadsheet (likely network block).
+            `;
+            try {
+                const localResponse = await fetch('./videos.json', { cache: 'no-store' });
+                if (!localResponse.ok) {
+                    throw new Error(`Local videos.json not found (Status: ${localResponse.status})`);
+                }
+                apiData = await localResponse.json();
+                
+                if (!Array.isArray(apiData) || apiData.length === 0) {
+                    throw new Error('Local videos.json file is empty or improperly formatted.');
+                }
+                console.log("Successfully loaded data from local videos.json backup.");
+
+            } catch (localError) {
+                // If local load also fails, show fatal error
+                console.error('Fatal Error: Failed to load data from both API and local backup.', localError);
+                loadingMessageEl.innerHTML = `
+                    <p style="color:red; font-weight:bold;">FATAL LOAD ERROR:</p>
+                    <p>Failed to load videos from live source or local backup. Please check network and file path.</p>
+                `;
+                return; // Stop execution
+            }
+        }
+        // --- End Fallback Logic ---
+
+        // Proceed with initialization using whichever data was successfully loaded
+        VIDEO_DATA = apiData; 
+        loadingMessageEl.style.display = 'none';
+        menuListEl.style.display = 'block';
+        
+        const checkReady = setInterval(() => {
+            if (isPlayerReady) {
+                clearInterval(checkReady);
+                
+                // Find the first video ID to initialize the player
+                const firstVideoId = VIDEO_DATA[0].categories[0].videos[0].id;
+                initializePlayer(firstVideoId);
+                renderMenu();
+                
+                // Default UI state: Open the first Teacher and Category
+                const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
+                if (firstTeacherHeader) {
+                    const firstTeacherContent = firstTeacherHeader.nextElementSibling;
+                    toggleCollapse(firstTeacherHeader, firstTeacherContent);
+                    
+                    const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
+                    if(firstCategoryHeader) {
+                        // Automatically open the flyout for the first category
+                        handleCategoryClick({currentTarget: firstCategoryHeader});
+                    }
+                }
+            }
+        }, 100);
     }
     
     // =========================================================================
@@ -720,6 +769,7 @@
         const isClickInsideFlyout = flyoutEl.contains(e.target);
         const isClickInsideSidebar = document.getElementById('sidebar').contains(e.target);
         
+        // Only close if flyout is open AND click is not inside the flyout AND click is not inside the sidebar
         if (flyoutEl.style.display !== 'none' && !isClickInsideFlyout && !isClickInsideSidebar) {
             closeFlyout();
         }
