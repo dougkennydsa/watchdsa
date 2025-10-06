@@ -1,56 +1,2279 @@
 [
   {
-    "teacher": "Ms. Alvarez",
+    "teacher": "Nic Liu",
     "categories": [
       {
-        "name": "Algebra I",
+        "name": "1-Dimensional Kinematics",
         "videos": [
-          { "title": "Intro to Linear Equations", "id": "dQw4w9WgXcQ" },
-          { "title": "Slope-Intercept Form",     "id": "3JZ_D3ELwOQ" },
-          { "title": "Graphing Basics",          "id": "l482T0yNkeo" }
+          {
+            "title": "Distance vs. Displacement",
+            "id": "B3qWCi9gdFE"
+          },
+          {
+            "title": "Speed vs. Velocity",
+            "id": "zhNzEj3Or98"
+          },
+          {
+            "title": "Describing Motion with Diagrams",
+            "id": "_OD4ySttSYg"
+          },
+          {
+            "title": "Accelerated motion",
+            "id": "hSho5Wm117Q"
+          },
+          {
+            "title": "P-T Graphs: Constant Speed Motion",
+            "id": "uBNBTHlOniA"
+          },
+          {
+            "title": "P-T Graphs: Changing Speed Motion",
+            "id": "-U-0_D5NM4I"
+          },
+          {
+            "title": "P-T Graphs: Calculating Slope",
+            "id": "uX75L8Ea6qo"
+          },
+          {
+            "title": "V-T Graphs: Constant Speed Motion",
+            "id": "yuXE9DF2HIA"
+          },
+          {
+            "title": "V-T Graphs: Changing Velocity Motion",
+            "id": "yh6mevbPuyQ"
+          },
+          {
+            "title": "V-T Graphs: Determining the Acceleration",
+            "id": "MAKvg7dOIP8"
+          },
+          {
+            "title": "V-T Graphs: Area Calculations",
+            "id": "BkHPL4jNZ6Y"
+          },
+          {
+            "title": "Describing Free Fall",
+            "id": "hWsjtovRqw4"
+          },
+          {
+            "title": "Intro to Kinematic Equations",
+            "id": "snH0sy-qyv0"
+          },
+          {
+            "title": "Using Kinematic Eq. - Part 1",
+            "id": "RsxzKYVhxK0"
+          },
+          {
+            "title": "Using Kinematic Eq. - Part 2",
+            "id": "mvi5kasMe3w"
+          },
+          {
+            "title": "Solving Free Fall Problems",
+            "id": "KDmhbyH9HzI"
+          }
         ]
       },
       {
-        "name": "Algebra II",
+        "name": "Newton's Laws of Motion",
         "videos": [
-          { "title": "Quadratics Overview",      "id": "kXYiU_JCYtU" },
-          { "title": "Completing the Square",    "id": "9bZkp7q19f0" }
+          {
+            "title": "What is a Force",
+            "id": "hGqwEnzRCwI"
+          },
+          {
+            "title": "Force Diagrams",
+            "id": "4MSe0UclyMI"
+          },
+          {
+            "title": "What do Forces Do",
+            "id": "sA86JdLoBd0"
+          },
+          {
+            "title": "Netwon 1st Law",
+            "id": "DXLhqliKTBM"
+          },
+          {
+            "title": "Force-Motion Misconceptions",
+            "id": "PKGGJG_5FBU"
+          },
+          {
+            "title": "Inertia and Mass",
+            "id": "oWWJxk6tlrw"
+          },
+          {
+            "title": "Recognizing Force Types",
+            "id": "JBsdOD62NuU"
+          },
+          {
+            "title": "Draw Free-body Diagrams",
+            "id": "3rZR7FSSidc"
+          },
+          {
+            "title": "Mass vs. Weight",
+            "id": "S_hLIA4hfhw"
+          },
+          {
+            "title": "Friction",
+            "id": "fRRAm2sdXIc"
+          },
+          {
+            "title": "Netwon 2nd Law",
+            "id": "6r1JT6ZVSdA"
+          },
+          {
+            "title": "Thinking Proportionally About Newton's Second Law",
+            "id": "EXRQNu0upZ4"
+          },
+          {
+            "title": "Determining Acceleration from Force Information",
+            "id": "VNEvRa2JFg8"
+          },
+          {
+            "title": "Determining and Individual Force Value",
+            "id": "93ZvMmSuCjY"
+          },
+          {
+            "title": "Free Fall and Newton's Second Law",
+            "id": "QknB5mG4_Ts"
+          },
+          {
+            "title": "Air Resistance, Terminal Velocity and Skydiving",
+            "id": "67V6ukurLFI"
+          },
+          {
+            "title": "Double Trouble with Two-body Problems",
+            "id": "Kbe06L9lJ18"
+          },
+          {
+            "title": "Atwood Machines",
+            "id": "Mmy8C_vvQ8A"
+          },
+          {
+            "title": "Newton's Third Law",
+            "id": "z0vvkhkGVi4"
+          },
+          {
+            "title": "Ineration Force Pairs",
+            "id": "H8t-ml5sKd8"
+          }
+        ]
+      },
+      {
+        "name": "Vectors and Projectiles",
+        "videos": [
+          {
+            "title": "Direction of Vectors",
+            "id": "4akBvJ_ByYM"
+          },
+          {
+            "title": "Drawing Scaled Vector Diagrams",
+            "id": "rGTZFxM1Fqk"
+          },
+          {
+            "title": "Head-to-tail Method of Vector Addition",
+            "id": "PkpJE0HZ7u8"
+          },
+          {
+            "title": "Graphical Method of Vector Addition",
+            "id": "MMPqekzM554"
+          },
+          {
+            "title": "Adding Right Angle Vectors",
+            "id": "akkV5XmzSzs"
+          },
+          {
+            "title": "What are Vector Components",
+            "id": "bWbUIE1Ex-g"
+          },
+          {
+            "title": "Vector Resolution",
+            "id": "N4-EugnlCKk"
+          },
+          {
+            "title": "Analytical Method of Vector Addition",
+            "id": "VRFHbXE9I04"
+          },
+          {
+            "title": "Relative Velocity and River Boat Problem",
+            "id": "UGTmOCJ0NKI"
+          },
+          {
+            "title": "Motion Characteristics of a Projectile",
+            "id": "r2xbfyeJHBw"
+          },
+          {
+            "title": "The Velocity Components of a Projectile",
+            "id": "x-K0lLkU5mk"
+          },
+          {
+            "title": "Horizontal and Vertical Displacement of a Projectile",
+            "id": "JhQgRBnVpgk"
+          },
+          {
+            "title": "The Mathematics of Projectile Motion",
+            "id": "rIDi5eqI2ps"
+          },
+          {
+            "title": "Solving Horizontally-Launched Projectile Problems",
+            "id": "jHGFnmr_9PU"
+          },
+          {
+            "title": "Solving Angle-Launched Projectile Problems",
+            "id": "dlf-xBkAv9w"
+          }
+        ]
+      },
+      {
+        "name": "Forces in Two Dimensions",
+        "videos": [
+          {
+            "title": "Adding and Resolving Force Vectors",
+            "id": "GDcGBFrJCcU"
+          },
+          {
+            "title": "What is Equilibrium?",
+            "id": "kYrZfkOyIfU"
+          },
+          {
+            "title": "Net Force Problems Revisited",
+            "id": "1mco1x3kNsw"
+          },
+          {
+            "title": "The Physics of Inclined Planes",
+            "id": "EPORI4WKJPE"
+          },
+          {
+            "title": "How to Analyze a Modified Atwood's Machine",
+            "id": "_TiNfOaCcYk"
+          }
+        ]
+      },
+      {
+        "name": "Momentum and Collisions",
+        "videos": [
+          {
+            "title": "What is Momentum?",
+            "id": "WAsv7ukOkpE"
+          },
+          {
+            "title": "Impulse - Momentum Change Relationship",
+            "id": "NZJpj6_98Mg"
+          },
+          {
+            "title": "Comparing Collisions with Equations",
+            "id": "wMfeZCZiiPo"
+          },
+          {
+            "title": "Action-Reaction and The Law of Momentum Conser",
+            "id": "Z5dvWDMh1eY"
+          },
+          {
+            "title": "The Physics of a Goal Line Stand",
+            "id": "F_R9N-TVx2s"
+          },
+          {
+            "title": "Explosion Analysis using Momentum Conservation",
+            "id": "xa6nxz2NTuo"
+          },
+          {
+            "title": "Solving Collision Problems with Momentum Conservation",
+            "id": "PR8_L37hPwI"
+          },
+          {
+            "title": "An Example Problem Involving Momentum Conservation",
+            "id": "-82Kud1AAww"
+          },
+          {
+            "title": "Momentum Conservation and Explosion Analysis",
+            "id": "iIMs75BOX4g"
+          },
+          {
+            "title": "Proportional Reasoning and Collision Analysis",
+            "id": "Xp1YIdPRC1E"
+          }
+        ]
+      },
+      {
+        "name": "Work Energy and Power",
+        "videos": [
+          {
+            "title": "The Physics of Work",
+            "id": "YLtpDK5O98g"
+          },
+          {
+            "title": "Work Calculations",
+            "id": "xMCNTerQxL0"
+          },
+          {
+            "title": "Gravitational and Elastic Potential Energy",
+            "id": "-oHQ-aX0IDc"
+          },
+          {
+            "title": "Kinetic Energy",
+            "id": "5jBOHKUcxoE"
+          },
+          {
+            "title": "The Physics of Power",
+            "id": "eNZ8WmqIj8o"
+          },
+          {
+            "title": "Mechanical Energy",
+            "id": "68rhAn3RdEY"
+          },
+          {
+            "title": "Non-Mechanical Energy",
+            "id": "G9KbBD3bt0Q"
+          },
+          {
+            "title": "Forces Energy and System Analysis",
+            "id": "Czpwy4lFit4"
+          },
+          {
+            "title": "External Energy Transfers",
+            "id": "Pj-qhVbLGds"
+          },
+          {
+            "title": "Mechanical Energy Conservation",
+            "id": "NlrT_9p38wI"
+          },
+          {
+            "title": "Work-Energy Bar Charts",
+            "id": "6_rmrgqAVKA"
+          },
+          {
+            "title": "Solving Work-Energy Problems",
+            "id": "OjsfcdWaRvA"
+          }
+        ]
+      },
+      {
+        "name": "Circular Motion and Gravitation",
+        "videos": [
+          {
+            "title": "Velocity and Acceleration for Circular Motion",
+            "id": "cKgknCnuQ3A"
+          },
+          {
+            "title": "The Centripetal Force Requirement",
+            "id": "e9PcbnvXfYs"
+          },
+          {
+            "title": "Inertia and Circular Motion",
+            "id": "PgMvPrQ1CJ0"
+          },
+          {
+            "title": "Circular Motion Equations",
+            "id": "VTiKEVQpjkU"
+          },
+          {
+            "title": "Roller Coaster Physics",
+            "id": "Ny_bbbmh0K0"
+          },
+          {
+            "title": "The Apple The Moon and Universal Gravitation",
+            "id": "srFq6OFsPSI"
+          },
+          {
+            "title": "Newton's Law of Universal Gravitation",
+            "id": "IeOC5jMC6zc"
+          },
+          {
+            "title": "Value of g",
+            "id": "NGsSCfJ3334"
+          },
+          {
+            "title": "Kepler's Three Laws of Planetary Motion",
+            "id": "MZKs-x0RpHE"
+          },
+          {
+            "title": "Satellite Motion Principles",
+            "id": "4v0zY3Kq4Kk"
+          },
+          {
+            "title": "Satellite Motion Mathmatics",
+            "id": "fPiJmpVnVCk"
+          },
+          {
+            "title": "Weightlessness in Orbit",
+            "id": "Z9PtJIwi_jg"
+          }
+        ]
+      },
+      {
+        "name": "Electric Circuits",
+        "videos": [
+          {
+            "title": "Electric Potential Energy",
+            "id": "DcK22r5hVDg"
+          },
+          {
+            "title": "Electric Potential",
+            "id": "lPrEw2iE1zY"
+          },
+          {
+            "title": "Electric Potential Difference",
+            "id": "9lKZZ9WYF8Y"
+          },
+          {
+            "title": "Electric Circuits and Their Requirements",
+            "id": "bFBL_-SiOUk"
+          },
+          {
+            "title": "Electric Current",
+            "id": "F2Jj_rQ36mc"
+          },
+          {
+            "title": "Electric Power",
+            "id": "EsBlxVKcUFU"
+          },
+          {
+            "title": "Common Misconceptions About Electric Circuits",
+            "id": "N5npEwR5iYU"
+          },
+          {
+            "title": "Electrical Resistance",
+            "id": "6k0Lg-APC6I"
+          },
+          {
+            "title": "Ohms Law Equation",
+            "id": "w_A2uinnIu0"
+          },
+          {
+            "title": "Electric Power Equations",
+            "id": "CtlFSjLiiKI"
+          },
+          {
+            "title": "Comparing Series and Parallel Circuits",
+            "id": "D-A511tgfyo"
+          },
+          {
+            "title": "Series Circuit Relationships",
+            "id": "nDsycG9lTJk"
+          },
+          {
+            "title": "Series Circuit Analysis",
+            "id": "L4qBOEbakqY"
+          },
+          {
+            "title": "Parallel Circuit Relationships",
+            "id": "PmGFYYle8WI"
+          },
+          {
+            "title": "Parallel Circuit Analysis",
+            "id": "6tFKFTNSH0o"
+          },
+          {
+            "title": "Combination Circuits",
+            "id": "0DpzlHNnYIk"
+          }
+        ]
+      },
+      {
+        "name": "Static Electricity",
+        "videos": [
+          {
+            "title": "Charged Vs. Uncharged Objects",
+            "id": "wHtlDOmWwQI"
+          },
+          {
+            "title": "Charge Interactions",
+            "id": "0V-a4UBPL40"
+          },
+          {
+            "title": "Conductors and Insulators",
+            "id": "2oIOTjq4YWA"
+          },
+          {
+            "title": "Polarization",
+            "id": "-tvmUjd9tBc"
+          },
+          {
+            "title": "Triboelectric Charging",
+            "id": "aY3Ju4SdaRA"
+          },
+          {
+            "title": "Charging by Induction",
+            "id": "763tiBXvTGw"
+          },
+          {
+            "title": "Charging by Conduction",
+            "id": "pwgkXfCcv48"
+          },
+          {
+            "title": "Grounding",
+            "id": "3lnJZPsVGBc"
+          },
+          {
+            "title": "Coulomb's Law",
+            "id": "G11OJMnMlTE"
+          },
+          {
+            "title": "Proportional Reasoning with Coulomb's Law",
+            "id": "5ybdsBo8J3A"
+          },
+          {
+            "title": "Coulomb's Law and Force Analysis",
+            "id": "MB4lTM4q-nI"
+          },
+          {
+            "title": "Electric Field Concept",
+            "id": "HWy8b0A_TcI"
+          },
+          {
+            "title": "Electric Field Intensity",
+            "id": "OGtWIhRVS2k"
+          },
+          {
+            "title": "Electric Field Lines",
+            "id": "zyUUwCFVFE8"
+          },
+          {
+            "title": "Solving Difficult Electric Field Problems",
+            "id": "UyqSXS6JNnU"
+          }
         ]
       }
     ]
   },
   {
-    "teacher": "Mr. Chen",
+    "teacher": "Taylor Hammer",
     "categories": [
       {
-        "name": "Geometry",
+        "name": "Economics",
         "videos": [
-          { "title": "Triangles & Angles",       "id": "V-_O7nl0Ii0" },
-          { "title": "Similarity Basics",        "id": "fJ9rUzIMcZQ" }
+          {
+            "title": "Index Funds vs Mutual Funds vs ETF",
+            "id": "vGcOGYkttI4"
+          },
+          {
+            "title": "What Gives a Dollar Bill Its Value?",
+            "id": "XNu5ppFZbHo"
+          },
+          {
+            "title": "The Federal Reserve and You",
+            "id": "8KC2O3_3eH0"
+          },
+          {
+            "title": "My Wealth is Not in What I Own",
+            "id": "05jKxv8ApuI"
+          },
+          {
+            "title": "What is a 401(k)?",
+            "id": "tP4zWCS4dMM"
+          }
         ]
       },
       {
-        "name": "Proofs",
+        "name": "US Government",
         "videos": [
-          { "title": "Two-Column Proofs",        "id": "eY52Zsg-KVI" }
+          {
+            "title": "Full Debate: Harris vs. Trump in 2024 ABC News Presidential Debate | WSJ",
+            "id": "VgsC_aBquUE"
+          },
+          {
+            "title": "The Electoral College, explained",
+            "id": "ajavsMbCapY"
+          },
+          {
+            "title": "Democrat vs. Republicans: A Quick Guide to America’s Two Major Parties",
+            "id": "-z7h5JFG_m4"
+          },
+          {
+            "title": "US Tik Tok Ban Explained",
+            "id": "yI2DJz0BH5c"
+          },
+          {
+            "title": "The Electoral College, explained",
+            "id": "ajavsMbCapY"
+          },
+          {
+            "title": "Democrat vs. Republican Beliefs",
+            "id": "9PrvciTGpRI"
+          },
+          {
+            "title": "Trailer: On the Basis of Sex",
+            "id": "28dHbIR_NB4"
+          }
+        ]
+      },
+      {
+        "name": "Psychology",
+        "videos": [
+          {
+            "title": "The Little Albert Experiment",
+            "id": "9hBfnXACsOI"
+          },
+          {
+            "title": "The Bobo Doll Experiment",
+            "id": "6lYsmt9qUVI"
+          }
+        ]
+      },
+      {
+        "name": "Sociology",
+        "videos": [
+          {
+            "title": "The Monster Study",
+            "id": "os5ThrJfXVE"
+          }
         ]
       }
     ]
   },
   {
-    "teacher": "Mrs. Rivera",
+    "teacher": "Kyle Fax",
     "categories": [
       {
-        "name": "Pre-Algebra",
+        "name": "Unit 1",
         "videos": [
-          { "title": "Order of Operations",      "id": "2vjPBrBU-TM" },
-          { "title": "Fractions Review",         "id": "hTWKbfoikeg" }
+          {
+            "title": "Annotated Bibliography for CGP Paper (Fall 2022 Update)",
+            "id": "GT7JmvvpdZY"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Doug Kenny",
+    "categories": [
+      {
+        "name": "Computer Science",
+        "videos": [
+          {
+            "title": "Swift in 100 Seconds",
+            "id": "nAchMctX4YA"
+          }
         ]
       },
       {
-        "name": "Number Sense",
+        "name": "Focus",
         "videos": [
-          { "title": "Integers & Absolute Value","id": "L_jWHffIx5E" }
+          {
+            "title": "Relaxing Meadow",
+            "id": "ipf7ifVSeDU"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Jenny Goodman",
+    "categories": [
+      {
+        "name": "Study Music",
+        "videos": [
+          {
+            "title": "Jazz Study Music",
+            "id": "IzqFXhyiuHU"
+          },
+          {
+            "title": "Lofi Beats Study Music",
+            "id": "HZq5ldRws-E"
+          },
+          {
+            "title": "Pomodoro Method 50 minutes w/ 10 minute breaks (Lofi)",
+            "id": "PxIbwamsruc"
+          },
+          {
+            "title": "Pomodoro Method 25 minutes w/ 5 minute breaks (Lofi)",
+            "id": "LF9lH7dvuv8"
+          },
+          {
+            "title": "Soft Vintage Oldies Music",
+            "id": "7gahcS83uZ8"
+          }
+        ]
+      },
+      {
+        "name": "AP World History",
+        "videos": [
+          {
+            "title": "Topic 1.1 Developments in East Asia",
+            "id": "HfIWZhXt7fY"
+          },
+          {
+            "title": "Topic 1.2 Developments in Dar al Islam",
+            "id": "O9P1TaBnhg8"
+          },
+          {
+            "title": "Topic 1.3 State Building in South & Southeast Asia",
+            "id": "AMGPVDvo2VE"
+          },
+          {
+            "title": "Topic 1.4 State Building in the Americas",
+            "id": "ellUmfocjj8"
+          },
+          {
+            "title": "Topic 1.5 State Building in Africa",
+            "id": "p76pWQi9Hd8"
+          },
+          {
+            "title": "Topic 1.6 Developments in Europe",
+            "id": "ZaGC4rlc7nk"
+          },
+          {
+            "title": "Unit 1 Review",
+            "id": "xDkPq5KcbS4"
+          }
+        ]
+      },
+      {
+        "name": "AP Human Geography",
+        "videos": [
+          {
+            "title": "Topic 1.1 Map Projections & Types of Maps",
+            "id": "coDnSg9xGlU"
+          },
+          {
+            "title": "Topic 1.2 Types of Geographic Data",
+            "id": "1te6CqIolfY"
+          },
+          {
+            "title": "Topic 1.3 Geographic Data in Action",
+            "id": "fb3FNjjdn5U"
+          },
+          {
+            "title": "Topic 1.4 Spatial Concepts",
+            "id": "VxFfy64aaOc"
+          },
+          {
+            "title": "Topic 1.5 Environmental Determinis, Possiblism, & Land Use",
+            "id": "2uZ29qYTv0w"
+          },
+          {
+            "title": "Topic 1.6 Scale & Scales of Analysis",
+            "id": "dWbK5XXHmVw"
+          },
+          {
+            "title": "Topic 1.7 Different Types of Regions",
+            "id": "QZrcPoscvLs"
+          },
+          {
+            "title": "Everything You need for Your First APHuG FRQ",
+            "id": "qcoETqhyDh8"
+          },
+          {
+            "title": "How to Crush Your First APHuG MCQ",
+            "id": "7bEKEVnE3b0"
+          },
+          {
+            "title": "APHuG Unit 1 Review",
+            "id": "cN6ZHeg5Nsk"
+          },
+          {
+            "title": "APHuG Task Verbs Guide (FRQ)",
+            "id": "X5tDqaxSkOg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Hank Hoenecke",
+    "categories": [
+      {
+        "name": "OT Semester Final",
+        "videos": [
+          {
+            "title": "How to Study the Bible in Context: Two Essential Types",
+            "id": "R-rDUoKmceg"
+          },
+          {
+            "title": "Has the Bible Been Corrupted?",
+            "id": "xj366Uii8vM"
+          },
+          {
+            "title": "Who Wrote the Bible?",
+            "id": "jVTBJF2vlHw"
+          },
+          {
+            "title": "Who Wrote the Bible?",
+            "id": "jVTBJF2vlHw"
+          }
+        ]
+      },
+      {
+        "name": "OT Unit Exodus/Deut",
+        "videos": [
+          {
+            "title": "Book of Deuteronomy Summary: A Complete Animated Overview",
+            "id": "q5QEH9bH8AU"
+          },
+          {
+            "title": "Book of Exodus Summary: A Complete Animated Overview (Part 1)",
+            "id": "jH_aojNJM3E"
+          }
+        ]
+      },
+      {
+        "name": "OT Samuel",
+        "videos": [
+          {
+            "title": "Bible Project Samuel I II",
+            "id": "1impd8sOpj0"
+          }
+        ]
+      },
+      {
+        "name": "Doctrine Christology",
+        "videos": [
+          {
+            "title": "Background of Jesus in the Gospels | Jewish Expectations",
+            "id": "30BODUL8Ud8"
+          },
+          {
+            "title": "Who is Jesus?",
+            "id": "7gaphXbFZH4"
+          }
+        ]
+      },
+      {
+        "name": "Doctrine U5 Sin & God's Law",
+        "videos": [
+          {
+            "title": "Book of Romans Summary: A Complete Animated Overview (Part 1)",
+            "id": "ej_6dVdJSIU"
+          }
+        ]
+      },
+      {
+        "name": "Doctrine U1",
+        "videos": [
+          {
+            "title": "How God Deals With Evil Without Destroying Humanity",
+            "id": "G_OlRWGLdnw"
+          }
+        ]
+      },
+      {
+        "name": "Doctrine Christology Unit",
+        "videos": [
+          {
+            "title": "Book of Hebrews Summary: A Complete Animated Overview",
+            "id": "1fNWTZZwgbs"
+          },
+          {
+            "title": "Book of Colossians",
+            "id": "pXTXlDxQsvc"
+          }
+        ]
+      },
+      {
+        "name": "OT Proverbs",
+        "videos": [
+          {
+            "title": "[missing title]",
+            "id": "AzmYV8GNAIM"
+          }
+        ]
+      },
+      {
+        "name": "OT Solomon's Temple",
+        "videos": [
+          {
+            "title": "3D View of Solomon's Temple",
+            "id": "y2tha7ogpec"
+          }
+        ]
+      },
+      {
+        "name": "Holy Week",
+        "videos": [
+          {
+            "title": "How Jesus Became the King",
+            "id": "xmFPS0f-kzs"
+          },
+          {
+            "title": "Easter Isn't Pagan",
+            "id": "q31k28_rdTg"
+          },
+          {
+            "title": "VR Step Inside Holy Week",
+            "id": "NcnHN7JbhpY"
+          },
+          {
+            "title": "Passover - What it Means",
+            "id": "14x_PtlnJHw"
+          }
+        ]
+      },
+      {
+        "name": "OT Psalms",
+        "videos": [
+          {
+            "title": "Overview of Psalms",
+            "id": "j9phNEaPrv8"
+          }
+        ]
+      },
+      {
+        "name": "OT 1 & 2 Kings",
+        "videos": [
+          {
+            "title": "1 & 2 Kings",
+            "id": "bVFW3wbi9pk"
+          }
+        ]
+      },
+      {
+        "name": "OT 1 & 2 Chronicles",
+        "videos": [
+          {
+            "title": "1 & 2 Chronicles",
+            "id": "HR7xaHv3Ias"
+          }
+        ]
+      },
+      {
+        "name": "OT Prophets",
+        "videos": [
+          {
+            "title": "Jonah",
+            "id": "dLIabZc0O4c"
+          },
+          {
+            "title": "Daniel",
+            "id": "9cSC9uobtPM"
+          }
+        ]
+      },
+      {
+        "name": "What Would You Say",
+        "videos": [
+          {
+            "title": "Did Jesus Really Rise From the Dead?",
+            "id": "0cQ9T4RSXVc"
+          }
+        ]
+      },
+      {
+        "name": "OT Isaiah 1-39",
+        "videos": [
+          {
+            "title": "Book of Isaiah 1-39",
+            "id": "d0A6Uchb1F8"
+          }
+        ]
+      },
+      {
+        "name": "OT Isaiah 40-66",
+        "videos": [
+          {
+            "title": "Book of Isaiah 40-66",
+            "id": "_TzdEPuqgQg"
+          }
+        ]
+      },
+      {
+        "name": "OT Definitions Matter",
+        "videos": [
+          {
+            "title": "Truth",
+            "id": "Ha2-ya4UAyw"
+          },
+          {
+            "title": "Tolerance",
+            "id": "4JLkcADPcJo"
+          }
+        ]
+      },
+      {
+        "name": "OT Exile",
+        "videos": [
+          {
+            "title": "Exile Theme in the Bible",
+            "id": "xSua9_WhQFE"
+          }
+        ]
+      },
+      {
+        "name": "OT Arguments for God",
+        "videos": [
+          {
+            "title": "Who Created God?",
+            "id": "1yY9a2SwNx4"
+          },
+          {
+            "title": "Cosomological",
+            "id": "6CulBuMCLg0"
+          },
+          {
+            "title": "Teleological - Design",
+            "id": "EE76nwimuT0"
+          },
+          {
+            "title": "Moral Argument",
+            "id": "OxiAikEk2vU"
+          }
+        ]
+      },
+      {
+        "name": "Doctrine U1 How to Study",
+        "videos": [
+          {
+            "title": "The Canon",
+            "id": "nFEBwfYZBJY"
+          },
+          {
+            "title": "How NOT to read the Bible #1",
+            "id": "m0_k-le5O2g"
+          },
+          {
+            "title": "Ephesians",
+            "id": "6FfIE2jS7-k"
+          }
+        ]
+      },
+      {
+        "name": "Christian Doctrine Church",
+        "videos": [
+          {
+            "title": "How Each Christian Denomination was formed",
+            "id": "UB8GETn6O1k"
+          }
+        ]
+      },
+      {
+        "name": "Christian Doctirne - Devotion",
+        "videos": [
+          {
+            "title": "I Am Second Jim Munroe",
+            "id": "PSD3evrAb4Y"
+          }
+        ]
+      },
+      {
+        "name": "OT 1 Samuel",
+        "videos": [
+          {
+            "title": "1 Samuel Summary",
+            "id": "QJOju5Dw0V0"
+          }
+        ]
+      },
+      {
+        "name": "OT 2 Samuel",
+        "videos": [
+          {
+            "title": "2 Samuel Summary",
+            "id": "YvoWDXNDJgs"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Anna Swanson",
+    "categories": [
+      {
+        "name": "Rhetorical Analysis - Ted Talks",
+        "videos": [
+          {
+            "title": "Exercise as self-care",
+            "id": "Gg6ct9N1vfQ"
+          },
+          {
+            "title": "Eating our way to happiness",
+            "id": "s47uAMakba0"
+          },
+          {
+            "title": "How reading literature can help us develop empathy",
+            "id": "9nJv8sxpUKU"
+          },
+          {
+            "title": "How AI could save, and not destroy, education",
+            "id": "hJP5GqnTrNo"
+          },
+          {
+            "title": "The mental health crisis in college sports",
+            "id": "kQ8mxNpP5mc"
+          },
+          {
+            "title": "Athletes and Mental Health: The Hidden Opponent",
+            "id": "Sdk7pLpbIls"
+          },
+          {
+            "title": "How sports can tackle the loneliness crisis",
+            "id": "JEm0XHOs_JI"
+          }
+        ]
+      },
+      {
+        "name": "Choice Novel - PreReading Videos",
+        "videos": [
+          {
+            "title": "Scythe - Book Trailer",
+            "id": "rYPiWDEiVvU"
+          },
+          {
+            "title": "Scythe - Author Interview",
+            "id": "sA6xEszg5EM"
+          },
+          {
+            "title": "I Must Betray You - Romanian Revolution Historical Background",
+            "id": "VWIP4GOlOAQ"
+          },
+          {
+            "title": "Legend - How to Recognize a Dystopia",
+            "id": "6a6kbU88wu0"
+          },
+          {
+            "title": "The Sun is Also a Star - Movie Trailer",
+            "id": "3On0BXzGnuI"
+          },
+          {
+            "title": "The Sun is Also a Star - Author/Actors Interview",
+            "id": "KNqDrHWnIJg"
+          },
+          {
+            "title": "The Book Thief - Movie Trailer",
+            "id": "92EBSmxinus"
+          },
+          {
+            "title": "The Book Thief - Author Interview",
+            "id": "b7ijapqTaF0"
+          },
+          {
+            "title": "The Catcher in the Rye - CBS Segment",
+            "id": "hdcwo0ZOZbQ"
+          },
+          {
+            "title": "Pride and Prejudice - The Wicked Wit of Jane Austen",
+            "id": "NSL55lOwznU"
+          },
+          {
+            "title": "Pride and Prejudice - Movie Trailer",
+            "id": "Ur_DIHs92NM"
+          },
+          {
+            "title": "Turtles All the Way Down - Movie Trailer",
+            "id": "9XBFNmV0Bzc"
+          },
+          {
+            "title": "Turtles All the Way Down - Author Interview",
+            "id": "9vin5EU09Ac"
+          }
+        ]
+      },
+      {
+        "name": "Choice Novel - AudioBook",
+        "videos": [
+          {
+            "title": "Scythe Audiobook",
+            "id": "IY5x4M4nPxg"
+          },
+          {
+            "title": "Scythe Audiobook",
+            "id": "IY5x4M4nPxg"
+          },
+          {
+            "title": "The Catcher in the Rye Audiobook",
+            "id": "ot74dEJKADg"
+          }
+        ]
+      },
+      {
+        "name": "Choice Novel - Supplements",
+        "videos": [
+          {
+            "title": "Attachment Theory Video",
+            "id": "WjOowWxOXCg"
+          }
+        ]
+      },
+      {
+        "name": "The Glass Castle",
+        "videos": [
+          {
+            "title": "Why is it so hard to escape poverty? TedEd Video",
+            "id": "D9N7QaIOkG8"
+          },
+          {
+            "title": "Jeannette Walls Interview",
+            "id": "lW0XVno-0gM"
+          },
+          {
+            "title": "AUDIOBOOK",
+            "id": "pGEWE_MlzcA"
+          }
+        ]
+      },
+      {
+        "name": "Choice Novel - Choice Board",
+        "videos": [
+          {
+            "title": "\"An Origin Story\" - Sarah Kay and Phil Kaye",
+            "id": "esgfG3BoAPc"
+          },
+          {
+            "title": "\"Dear Basketball\" - Kobe Bryant",
+            "id": "lUcdx4W8Xes"
+          },
+          {
+            "title": "\"Leather and Lace\" - Stevie Nicks",
+            "id": "Nfa-Z3lKNB8"
+          },
+          {
+            "title": "\"Mother Daughter Drama\" - Ladybird",
+            "id": "uyNE-wVJ5eQ"
+          },
+          {
+            "title": "\"Happiness and Heartache of Interracial Marriage\" - National Geographic",
+            "id": "Of3FL4X7mLo"
+          },
+          {
+            "title": "\"How the Nuclear Family Broke Down\" - The Atlantic",
+            "id": "sd9d5z7idyQ"
+          },
+          {
+            "title": "\"Why Do We Love? A Philosophical Inquiry\" - Ted Ed",
+            "id": "yJSiUm6jvI0"
+          }
+        ]
+      },
+      {
+        "name": "Rhetoric in Advertising",
+        "videos": [
+          {
+            "title": "State Farm",
+            "id": "DaVlo57GBsM"
+          },
+          {
+            "title": "Beats",
+            "id": "Dd1VIeTMGQs"
+          },
+          {
+            "title": "Pampers Diapers",
+            "id": "_bMumSvAAvc"
+          },
+          {
+            "title": "Google",
+            "id": "Qyiautg41h8"
+          },
+          {
+            "title": "Gillette",
+            "id": "1pz-AnLYbGQ"
+          },
+          {
+            "title": "Amazon",
+            "id": "i8hrrA2Gxgc"
+          }
+        ]
+      },
+      {
+        "name": "The Crucible",
+        "videos": [
+          {
+            "title": "Sound Smart: The Red Scare",
+            "id": "A4LpLqHNOTk"
+          },
+          {
+            "title": "What is McCarthyism?",
+            "id": "N35IugBYH04"
+          },
+          {
+            "title": "The Hollywood Blacklist",
+            "id": "nJzV6-wJ3SQ"
+          },
+          {
+            "title": "Act 1 - Audiobook",
+            "id": "_MpKatEm0pM"
+          },
+          {
+            "title": "Act 2 - Audiobook",
+            "id": "3WJ3MR0XLEk"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Emily Zank",
+    "categories": [
+      {
+        "name": "Biology- Unit DNA",
+        "videos": [
+          {
+            "title": "Building a Dinosaur from a chicken- Jack Horner",
+            "id": "BqNnqf_3Z7M"
+          },
+          {
+            "title": "Fragile X Syndrome",
+            "id": "vrOnHeLd-7I"
+          },
+          {
+            "title": "Meet the Families: Understanding Fragile X Syndrome Video Series",
+            "id": "U7ldQkloIOE"
+          }
+        ]
+      },
+      {
+        "name": "Biology-Unit Plants",
+        "videos": [
+          {
+            "title": "Gymnosperms and Angiosperms",
+            "id": "xGZNHGY98ZE"
+          },
+          {
+            "title": "Seed Plants",
+            "id": "fg31Wym998E"
+          },
+          {
+            "title": "Gymnosperm Lifecycle",
+            "id": "OYIOQv4J5lQ"
+          },
+          {
+            "title": "Plant Reproduction in Angiosperms",
+            "id": "HLYPm2idSTE"
+          }
+        ]
+      },
+      {
+        "name": "Biology-Unit Animal Systems",
+        "videos": [
+          {
+            "title": "Crash Course: Simple Animals",
+            "id": "tIfsHPpkSPs"
+          },
+          {
+            "title": "Crash Course: Complex Animals",
+            "id": "YQb7Xq0enTI"
+          }
+        ]
+      },
+      {
+        "name": "Human Body Systems",
+        "videos": [
+          {
+            "title": "Circulatory System and Pathway of Blood Through the Heart",
+            "id": "_vZ0lefPg_0"
+          },
+          {
+            "title": "Anatomy and Physiology of the Respiratory System",
+            "id": "TgcyiVQnVBs"
+          },
+          {
+            "title": "Integumentary System",
+            "id": "t1iQHHJ0YyE"
+          },
+          {
+            "title": "Muscular System Introduction",
+            "id": "rMcg9YzNSEs"
+          },
+          {
+            "title": "Muscle Tissues and Sliding Filament Theory",
+            "id": "dpxalWACO7k"
+          },
+          {
+            "title": "Excretory System",
+            "id": "q5qaGHfdmYM"
+          },
+          {
+            "title": "Nervous System",
+            "id": "RNLceVI8jcc"
+          },
+          {
+            "title": "Endocrine System",
+            "id": "vLdNX5Te1Xo"
+          },
+          {
+            "title": "Endocrine System",
+            "id": "emvHaBiRY8Q"
+          },
+          {
+            "title": "Reproductive System (Female)",
+            "id": "-5SOvWaW_OY"
+          },
+          {
+            "title": "Reproductive System (Male)",
+            "id": "QkqDoF9KK60"
+          },
+          {
+            "title": "Digestive System",
+            "id": "1UvuBYUbFk0"
+          },
+          {
+            "title": "Skeletal System",
+            "id": "3HV55QRPRPE"
+          },
+          {
+            "title": "Bones of the Skeletal System",
+            "id": "h5dYvPruBFY"
+          }
+        ]
+      },
+      {
+        "name": "Biology Lab Videos",
+        "videos": [
+          {
+            "title": "How to Make a Paper Airplane",
+            "id": "veyZNyurlwU"
+          }
+        ]
+      },
+      {
+        "name": "Properties of Water",
+        "videos": [
+          {
+            "title": "Properties of Water",
+            "id": "3jwAGWky98c"
+          }
+        ]
+      },
+      {
+        "name": "Biology Intervention",
+        "videos": [
+          {
+            "title": "Biomolecules",
+            "id": "YO244P1e9QM"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Peter Mathwig",
+    "categories": [
+      {
+        "name": "Algebra 2",
+        "videos": [
+          {
+            "title": "Lesson 6-2 Inverses and Functions",
+            "id": "b18pXMqNeYo"
+          },
+          {
+            "title": "Lesson 6-1 Operations on Functions",
+            "id": "aSsEL3okom4"
+          },
+          {
+            "title": "Lesson 6-3 nth Roots and Exponents",
+            "id": "bBcXGzSKJnc"
+          },
+          {
+            "title": "Lesson 6-4 Graphing Radical Functions",
+            "id": "hlggBxB-W3s"
+          },
+          {
+            "title": "Lesson 6-5 Operations with Radical Expressions",
+            "id": "k7kMaAvSaKI"
+          },
+          {
+            "title": "Lesson 6-6 Solving Radical Equations",
+            "id": "F_15tK6bE64"
+          },
+          {
+            "title": "Module 6 Test Review",
+            "id": "J3v-HCOrshU"
+          },
+          {
+            "title": "Lesson 7-1 Graphing Exponential Functions",
+            "id": "0RUbalEwC8E"
+          },
+          {
+            "title": "Lesson 7-2 Solving Exponential Equations",
+            "id": "7mZdcmHx7Hk"
+          },
+          {
+            "title": "Lesson 7-3 Special Exponential Functions",
+            "id": "ZsPuS77p3ro"
+          },
+          {
+            "title": "Lesson 7-4 Geometric Sequences",
+            "id": "NyDOyHaV-uY"
+          },
+          {
+            "title": "Lesson 7-5 Modeling Data",
+            "id": "DRVaxDFMn04"
+          },
+          {
+            "title": "Module 7 Test Review",
+            "id": "5IpJqBdvQ4Y"
+          },
+          {
+            "title": "Lesson 8-1 Logarithms and Logarithmic Function",
+            "id": "t1g8gldJKbg"
+          },
+          {
+            "title": "Converting Logarithms to Exponentials and Exponentials to Logarithms",
+            "id": "mRTlSqyc4yY"
+          },
+          {
+            "title": "Lesson 8-2 Properties of Logarithms",
+            "id": "Gth-IWcSBgc"
+          },
+          {
+            "title": "Lesson 8-2 Word Problems on Properties of Logarithms",
+            "id": "abWuKcSUoGQ"
+          },
+          {
+            "title": "Lesson 8-3 Common Logarithms",
+            "id": "yOUnYYkO6MA"
+          },
+          {
+            "title": "Lesson 8-3 Common Logarithms (Shorter Version)",
+            "id": "au0NnQUJlAU"
+          },
+          {
+            "title": "Lesson 8-4 Natural Logarithms",
+            "id": "SU2avfbA7BM"
+          },
+          {
+            "title": "Lesson 8-5 Using Exponential and Logarithmic Functions",
+            "id": "u6vK-bkcc9g"
+          },
+          {
+            "title": "Lesson 8-6 Simple, Compound, and Continuously Compounded Interest",
+            "id": "9JWsKtkS1tk"
+          },
+          {
+            "title": "Module 8 Test Review",
+            "id": "SI0e6hLCTss"
+          },
+          {
+            "title": "Lesson 9-1 Multiplying and Dividing Rational Expressions",
+            "id": "wxhvrfpUjeY"
+          },
+          {
+            "title": "Lesson 9-2 Adding and Subtracting Rational Expressions",
+            "id": "MAqcJAnca1Q"
+          },
+          {
+            "title": "Lesson 9-3 Graphing Reciprocal Functions",
+            "id": "m_Pd6-qvKzs"
+          },
+          {
+            "title": "Lesson 9-4 Graphing Rational Functions",
+            "id": "OI19WsbwcwY"
+          },
+          {
+            "title": "Lesson 9-5 Variation",
+            "id": "t1tAp_a9uXw"
+          },
+          {
+            "title": "Lesson 9-6 Solving Rational Equations and Inequalities",
+            "id": "ev6yyMfE9-4"
+          },
+          {
+            "title": "Module 9 Test Review",
+            "id": "hYNnqVIW-4o"
+          },
+          {
+            "title": "Reciprocal Functions and Point of Discontinuity",
+            "id": "yCvV7JNcn_Y"
+          },
+          {
+            "title": "Graph Rational Functions Ex. 1: Horizontal Asymptote at y = 0",
+            "id": "afX9LzP2ris"
+          },
+          {
+            "title": "Graph Rational Functions Ex. 2:",
+            "id": "KwLdmSNbiUc"
+          },
+          {
+            "title": "Graph Rational Functions: Ex. 3: Slant or Oblique Asymptote",
+            "id": "-tr1Sku5olw"
+          },
+          {
+            "title": "Graph Rational Functions: Example from ALEKS",
+            "id": "QeQ8NZRaVdY"
+          },
+          {
+            "title": "Lesson 10-1 Sample Spaces",
+            "id": "OzMeUWYqZfo"
+          },
+          {
+            "title": "Lesson 10-2 Probability and Counting",
+            "id": "z_Myg_qtrNA"
+          },
+          {
+            "title": "Lesson 10-3 Probability with Permutations and Combinations",
+            "id": "d29q7FvNcf4"
+          },
+          {
+            "title": "Lesson 10-4 Probability and the Multiplication Rule",
+            "id": "WzZNzViiNkc"
+          },
+          {
+            "title": "Lesson 10-5 Probabiltity and the Addition Rule",
+            "id": "3EltEqzXmZ8"
+          },
+          {
+            "title": "Lesson 10-6 Conditional Probability",
+            "id": "rfOs4jLZNiM"
+          },
+          {
+            "title": "Module 10 Test Review",
+            "id": "paSDp0wiI1c"
+          },
+          {
+            "title": "Lesson 11-2 Operations with Matrices",
+            "id": "TF1pRctYeLQ"
+          },
+          {
+            "title": "Lesson 11-3 Multiplying Matrices",
+            "id": "kFTyS-YF8lI"
+          },
+          {
+            "title": "Lesson 11-4 Solving Systems of Equations Using Cramer's Rule",
+            "id": "XwhH0TgRPgI"
+          },
+          {
+            "title": "Lesson 11-5 Solving Systems of Equations Using Inverse Matrices",
+            "id": "z8fHFXY_uD8"
+          },
+          {
+            "title": "Find the Determinant on TI-83 Calculator",
+            "id": "exbL4h42OT0"
+          },
+          {
+            "title": "Find the Inverse of a Matrix on TI-83 Calculator",
+            "id": "j-t0ibZjNWQ"
+          },
+          {
+            "title": "Solve a System of 3 Equations with 3 Variables on TI-83 Calculator",
+            "id": "IachY_8n6og"
+          },
+          {
+            "title": "Module 11 Test Review",
+            "id": "Cm7p7Y4T32g"
+          },
+          {
+            "title": "Semester 2 Test Review: Modules 6-11",
+            "id": "UeZySGWOtj4"
+          }
+        ]
+      },
+      {
+        "name": "Algebra 1",
+        "videos": [
+          {
+            "title": "Lesson 7-1 Multiplication Property of Exponents",
+            "id": "Vu3FUlU0pLI"
+          },
+          {
+            "title": "Lesson 7-2 Division Properties of Exponents",
+            "id": "B9IIrWcSqNE"
+          },
+          {
+            "title": "Lesson 7-3 Negative Exponents",
+            "id": "XJeav_U_Z58"
+          },
+          {
+            "title": "Lesson 7-4 Rational Exponents",
+            "id": "KOjtNWSZ-jY"
+          },
+          {
+            "title": "Lesson 7-5 Simplifying Radical Expressions",
+            "id": "mBd_qjLU_pQ"
+          },
+          {
+            "title": "Lesson 7-6 Operations with Radical Expressions",
+            "id": "-hobk7SGBwQ"
+          },
+          {
+            "title": "Module 7 Test Review",
+            "id": "SJPHl6JvFAQ"
+          },
+          {
+            "title": "Lesson 8-1 Exponential Functions",
+            "id": "LaAJEWONqAk"
+          },
+          {
+            "title": "Lesson 8-2 Interpreting Graphs of Exponential Functions",
+            "id": "4wbDX3AkhMc"
+          },
+          {
+            "title": "Lesson 8-3 Writing Exponential Functions",
+            "id": "4NYYYj3bOYI"
+          },
+          {
+            "title": "Lesson 8-4 Compound Interest",
+            "id": "QodgAw_48mw"
+          },
+          {
+            "title": "Lesson 8-5 Transforming Exponential Functions",
+            "id": "QM-1ajYLnhg"
+          },
+          {
+            "title": "Module 8 Test Review",
+            "id": "MC_EcnYqAds"
+          },
+          {
+            "title": "Lesson 9-1 Adding and Subtracting Polynomials",
+            "id": "K9eGx3QGshY"
+          },
+          {
+            "title": "Lesson 9-2 Multiplying Polynomials by Monomials",
+            "id": "Zh5hBi6ka8A"
+          },
+          {
+            "title": "Lesson 9-3 Multiplying Polynomials",
+            "id": "oHPvOyRDoeM"
+          },
+          {
+            "title": "Lesson 9-4 Special Products",
+            "id": "VBtgG_oyAUk"
+          },
+          {
+            "title": "Lesson 9-5 Using the Distributive Property to Factor",
+            "id": "LBgWmdWzFJ8"
+          },
+          {
+            "title": "Lesson 9-6 Factoring Quadratic Trinomials",
+            "id": "Z8qKHBNSUuU"
+          },
+          {
+            "title": "Lesson 9-7 Factoring Special Products",
+            "id": "p48B02wZxoQ"
+          },
+          {
+            "title": "Lesson 9-8 Dividing Polynomials",
+            "id": "56sa-13INsg"
+          },
+          {
+            "title": "Module 9 Test Review",
+            "id": "xDUsLsZxsG4"
+          },
+          {
+            "title": "Lesson 10-1 Graphing Quadratic Functions",
+            "id": "dn77xmRoaRc"
+          },
+          {
+            "title": "Lesson 10-2 Transformations of Quadratic Functions",
+            "id": "IGwRDCOag1M"
+          },
+          {
+            "title": "Graphing a Quadratic on a TI-83 Calculator",
+            "id": "8KSbHMA00NY"
+          },
+          {
+            "title": "Lesson 10-2B Equations of Transformations of Quadratic Functions",
+            "id": "WDLL69kdW2k"
+          },
+          {
+            "title": "Lesson 10-3 Solving Quadratic Equations by Graphing",
+            "id": "NRJaQRMvYkc"
+          },
+          {
+            "title": "Lesson 10-4 Solving Quadratic Equations by Factoring",
+            "id": "H26A1EqBMe4"
+          },
+          {
+            "title": "Lesson 10-5 Solving Quadratic Equations by Completing the Square",
+            "id": "6plzkL8UW3I"
+          },
+          {
+            "title": "Lesson 10-6 Solving Quadratic Equations by Using the Quadratic Formula",
+            "id": "Dex7gtiv9uk"
+          },
+          {
+            "title": "Lesson 10-7 Modeling and Curve Fitting",
+            "id": "ZiarVZif-7M"
+          },
+          {
+            "title": "Lesson 10-8 Combining Functions",
+            "id": "L_qXNvAz274"
+          },
+          {
+            "title": "Module 10 Test Review (Updated)",
+            "id": "1oFTOIFflek"
+          },
+          {
+            "title": "Lesson 11-1 Univariat Data",
+            "id": "Cn-WrogukL0"
+          },
+          {
+            "title": "Lesson 11-2 Two Way Frequency Tables",
+            "id": "nv2kYKws-lk"
+          },
+          {
+            "title": "Lesson 11-2B Summarizing Categorical Bivariate Data",
+            "id": "pJ7f_sal3gs"
+          },
+          {
+            "title": "Lesson 11-3 Bivariate Data",
+            "id": "Pn9Wq6rMrrE"
+          },
+          {
+            "title": "Lesson 11-4 Distributions of Data",
+            "id": "yBoDcQ2Bh1o"
+          },
+          {
+            "title": "Lesson 11-5 Comparing Sets of Data",
+            "id": "pdhfwdIanR8"
+          },
+          {
+            "title": "Histograms and Box Plots on TI-83 Calculator",
+            "id": "YdWh1ZOBYD0"
+          },
+          {
+            "title": "Module 11 Test Review",
+            "id": "3SGTdj9IdvM"
+          },
+          {
+            "title": "Semester 2 Test Review: Modules 7-11",
+            "id": "1r38HXMuLyg"
+          }
+        ]
+      },
+      {
+        "name": "Aglebra 1",
+        "videos": [
+          {
+            "title": "Two Way Frequency Tables",
+            "id": "udSViI0u8D4"
+          }
+        ]
+      },
+      {
+        "name": "Algebar 2",
+        "videos": [
+          {
+            "title": "Lesson 11-1 Representing Data Using Matrices",
+            "id": "KF2x8iegQGw"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Zamora",
+    "categories": [
+      {
+        "name": "CSE",
+        "videos": [
+          {
+            "title": "Classes and objects",
+            "id": "apACNr7DC_s"
+          },
+          {
+            "title": "Difference between function and method in Python",
+            "id": "qX5TpBzpIwo"
+          },
+          {
+            "title": "Self in Python",
+            "id": "oaiQ5hYKHTE"
+          },
+          {
+            "title": "PyUIBuilder",
+            "id": "Lp2-ToDlqSk"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Erika Biesterfeld",
+    "categories": [
+      {
+        "name": "AP Research",
+        "videos": [
+          {
+            "title": "Yoruba - Sample AP Research POD",
+            "id": "HKD7xnQqhb0"
+          }
+        ]
+      },
+      {
+        "name": "AP Language",
+        "videos": [
+          {
+            "title": "1 - MCQ Reading Questions",
+            "id": "tJmEKpdckFY"
+          },
+          {
+            "title": "2 - MCQ Writing Questions",
+            "id": "GVsEmdrXPNo"
+          },
+          {
+            "title": "3 - FRQ1",
+            "id": "VsTAbegQaOM"
+          },
+          {
+            "title": "4 - FRQ1",
+            "id": "sWuCSbJsLqI"
+          },
+          {
+            "title": "5 - FRQ2",
+            "id": "y2pdU4ANzos"
+          },
+          {
+            "title": "6 - FRQ2",
+            "id": "pl_YzQuqYoA"
+          },
+          {
+            "title": "7 - FRQ3",
+            "id": "BUHF_ZfHHL8"
+          },
+          {
+            "title": "8 - FRQ3",
+            "id": "varE3O8Wqhs"
+          },
+          {
+            "title": "Kennedy Announces MLK Death",
+            "id": "A2kWIa8wSC0"
+          },
+          {
+            "title": "How I Easily Annotate for Rhetorical Analysis",
+            "id": "BqhEBFvDU4U"
+          },
+          {
+            "title": "More Ways I Easily Annotate for Rhetorical Analysis",
+            "id": "acbU51ubD8w"
+          },
+          {
+            "title": "The Final Ways I Easily Annotate for Rhetorical Analysis",
+            "id": "W35OgPLWgzE"
+          }
+        ]
+      },
+      {
+        "name": "The Lottery",
+        "videos": [
+          {
+            "title": "The Lottery",
+            "id": "Kf90v9GOaAk"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Madeline Lange",
+    "categories": [
+      {
+        "name": "Introduction to Academic English",
+        "videos": [
+          {
+            "title": "Fahrenheit 451 by Ray Bradbury I Full Audiobook",
+            "id": "B9BgYLaB1mI"
+          },
+          {
+            "title": "Fahrenheit 451: p. 122-138 read by Ellen Linnihan, author of Capturing the Classroom",
+            "id": "DJK9qSQbW3A"
+          },
+          {
+            "title": "Fahrenheit 451: p. 138 - end read by Ellen Linnihan, author of Capturing the Classroom",
+            "id": "WKB7HPnILMs"
+          }
+        ]
+      },
+      {
+        "name": "Pre-AP English",
+        "videos": [
+          {
+            "title": "myShakespeare | Macbeth Context: Witchcraft in Shakespeare's Time",
+            "id": "KvaZd3OmPNA"
+          },
+          {
+            "title": "Why should you read \"Macbeth\"? - Brendan Pelsue",
+            "id": "rD5goS69LT4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Santiago Botero",
+    "categories": [
+      {
+        "name": "IED- Module 1",
+        "videos": [
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "94wTgI-xS2o"
+          },
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "bk2E8P33Ztc"
+          },
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "yGjVnXgUpQM"
+          },
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "TOXKvDLLRsI"
+          },
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "qVWJbdECCqE"
+          },
+          {
+            "title": "Activity 1.2.3 Multiview Sketching",
+            "id": "ViyXj0fC64Y"
+          }
+        ]
+      },
+      {
+        "name": "IED- Module 4",
+        "videos": [
+          {
+            "title": "Pear Cam",
+            "id": "FSPxYvuau-o"
+          },
+          {
+            "title": "Eccentric Cam",
+            "id": "MDZwy1BzGBw"
+          },
+          {
+            "title": "Snail Cam",
+            "id": "6DPHyJUau6E"
+          },
+          {
+            "title": "Hex Cam",
+            "id": "ytyUeKiVOr8"
+          },
+          {
+            "title": "Heart Cam",
+            "id": "daj0W_uQDcc"
+          },
+          {
+            "title": "Activity 4.1.4 Modeling Mechanical Motion",
+            "id": "NkWd4gIQ9ns"
+          },
+          {
+            "title": "Activity 4.1.4 Modeling Mechanical Motion",
+            "id": "qmmWiMnABto"
+          }
+        ]
+      },
+      {
+        "name": "ALG- Module 3",
+        "videos": [
+          {
+            "title": "Mod 3 Lesson 6a",
+            "id": "1OtzfP8fCNU"
+          },
+          {
+            "title": "Mod 3 Lesson 6b",
+            "id": "weGn1iTnm-I"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Leah Nass",
+    "categories": [
+      {
+        "name": "Logical Fallacies",
+        "videos": [
+          {
+            "title": "Types of Misinformation - University of Michigan",
+            "id": "51oVkfoWxHM"
+          },
+          {
+            "title": "Introduction to Critical Thinking",
+            "id": "Cum3k-Wglfw"
+          },
+          {
+            "title": "Fallacies: Equivocation",
+            "id": "bmIqWT7qMj4"
+          },
+          {
+            "title": "Fallacies: Fallacy of Composition",
+            "id": "JELm6peL_sI"
+          },
+          {
+            "title": "Fallacies: Fallacy of Division",
+            "id": "uEhRqiSA4ko"
+          },
+          {
+            "title": "Fallacies: Ad Hominem (All 4 Types)",
+            "id": "qBkj-AYYg7w"
+          },
+          {
+            "title": "Fallacies: Post Hoc Ergo Propter Hoc",
+            "id": "5A7hSaoRv0g"
+          },
+          {
+            "title": "Fallacies: Appeal to the People",
+            "id": "aF6EHTtyYqw"
+          },
+          {
+            "title": "Fallacies: Straw Man Fallacy",
+            "id": "hfil34ayaEU"
+          },
+          {
+            "title": "Slippery Slope",
+            "id": "yxylBjtzMNQ"
+          },
+          {
+            "title": "Red Herring",
+            "id": "Af0STrY58i4"
+          }
+        ]
+      },
+      {
+        "name": "Health",
+        "videos": [
+          {
+            "title": "How Culture Drives Behavior",
+            "id": "l-Yy6poJ2zs"
+          },
+          {
+            "title": "The Power of Addiction and The Addiction of Power: Gabor Maté",
+            "id": "66cYcSak6nE"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Aaron Swanson",
+    "categories": [
+      {
+        "name": "DE US History",
+        "videos": [
+          {
+            "title": "1.2 Native American Societies Before European Contact",
+            "id": "X_3bH6FJsLA"
+          },
+          {
+            "title": "1.3 European Exploration in the Americas",
+            "id": "TRrnYm_SwHc"
+          },
+          {
+            "title": "1.4 The Columbian Exchange, Spanish Exploration, and Conquest",
+            "id": "eLGxEcr-chw"
+          },
+          {
+            "title": "1.5 Labor, Slavery, and Caste in the Spanish Colonial System",
+            "id": "f1h-9W2Snik"
+          },
+          {
+            "title": "1.6 Cultural Interactions Between Europeans, Native Americans, and Africans",
+            "id": "s6hfwcgHvRY"
+          },
+          {
+            "title": "2.2 European Colonization in the Americas",
+            "id": "j5Y2SiZUtKY"
+          },
+          {
+            "title": "2.3 The Regions of the British Colonies",
+            "id": "F6HbzbkKaB4"
+          },
+          {
+            "title": "2.4 Transatlantic Trade",
+            "id": "yPyzIqfzx8M"
+          },
+          {
+            "title": "2.5 Interactions Between American Indians and Europeans",
+            "id": "Fd20x--zvvA"
+          },
+          {
+            "title": "2.6 Slavery in the British Colonies",
+            "id": "IRPobvHqd2A"
+          },
+          {
+            "title": "2.7 Colonial Society and Culture",
+            "id": "b10N3LAkdkg"
+          },
+          {
+            "title": "3.11 Developing An American Identity",
+            "id": "xvG1Ycaxjk0"
+          },
+          {
+            "title": "Unit 3 Review",
+            "id": "YhqXNJngvTo"
+          },
+          {
+            "title": "3.11 Developing An American Identity II",
+            "id": "xvG1Ycaxjk0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Luke Willems",
+    "categories": [
+      {
+        "name": "Honors Medical Interventions",
+        "videos": [
+          {
+            "title": "Modeling and ELISA Antigen Test",
+            "id": "vfVyXACdg6g"
+          },
+          {
+            "title": "Serial Dilutions",
+            "id": "y7M41D8vXw8"
+          },
+          {
+            "title": "Bacterial Structure",
+            "id": "gPWVHWoNxuo"
+          },
+          {
+            "title": "Agar Plates",
+            "id": "z1dIbuDgcq0"
+          }
+        ]
+      },
+      {
+        "name": "Honors Biomedical Innovations",
+        "videos": [
+          {
+            "title": "Boston Bomobing - Triage",
+            "id": "046MuD1pYJg"
+          },
+          {
+            "title": "St. Luke's ER",
+            "id": "8xOf7W531X0"
+          },
+          {
+            "title": "Lahey Hospital",
+            "id": "F2IqPHiXFes"
+          },
+          {
+            "title": "Lakeland Medical Center",
+            "id": "5vMfgCqEt_k"
+          },
+          {
+            "title": "Akron Children's",
+            "id": "t0WdVfiweNU"
+          },
+          {
+            "title": "EdHeads Trauma",
+            "id": "8SIqPdBUP04"
+          },
+          {
+            "title": "Stop the Bleed",
+            "id": "WGLLXy3AsBQ"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "teacher": "Diana Escalona",
+    "categories": [
+      {
+        "name": "English 1",
+        "videos": [
+          {
+            "title": "For the Birds",
+            "id": "DeEZx4K0Eic"
+          },
+          {
+            "title": "Partly Cloudy",
+            "id": "PfyJQEIsMt0"
+          },
+          {
+            "title": "Coin Operated",
+            "id": "5L4DQfVIcdg"
+          },
+          {
+            "title": "Feast",
+            "id": "A0P7A6JWcqY"
+          },
+          {
+            "title": "Piper",
+            "id": "WIPV1iwzrzg"
+          },
+          {
+            "title": "Lifted",
+            "id": "dWAERJhHL4w"
+          }
         ]
       }
     ]
