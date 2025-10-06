@@ -10,8 +10,8 @@
     /* 1. Reset and Base Styles */
     :root { 
         --w: 960px; /* Target width for the player */
-        --menu-width: 300px; 
-        --flyout-width: 350px; /* Width for the video list flyout */
+        --menu-width: 350px; /* Sidebar width for longer teacher names */
+        --flyout-width: 400px; /* Width for the video list flyout for longer titles */
         --color-accent: #BEA876; /* Gold/Accent Color for Teachers/Headers */
         --color-primary-bg: #283891; /* Dark Blue for Sidebar/Flyout Background */
         --color-bg-dark: #0b0d10;
@@ -25,7 +25,7 @@
     }
     .container { 
         display: flex; 
-        /* Total width: Player (960) + Sidebar (300) + Gaps (40) + Flyout (350) */
+        /* Total width: Player (960) + Sidebar (350) + Gaps (40) + Flyout (400) = 1750px */
         width: calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px); 
         max-width: 100%; 
         gap: 20px; 
@@ -83,6 +83,33 @@
         color: var(--color-primary-bg);
     }
     
+    /* Diagnostics Button Style */
+    #runDiagnosticsBtn {
+        background: #e76f51; /* A reddish color for attention */
+        color: var(--color-text-white);
+        border: none;
+        padding: 8px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95em;
+        line-height: 1;
+        transition: background-color 0.2s;
+        width: 100%; /* Make it full width of sidebar */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    #runDiagnosticsBtn:hover {
+        background: #f4a261; 
+    }
+
+    /* Diagnostics Results Styling */
+    #diagResults p { margin: 5px 0; padding: 5px 8px; border-radius: 4px; line-height: 1.3; }
+    .diag-success { background: #4caf50; color: white; border: 1px solid #388e3c; } /* Green */
+    .diag-failure { background: #f44336; color: white; border: 1px solid #d32f2f; } /* Red */
+    .diag-warning { background: #ffeb3b; color: #333; border: 1px solid #fbc02d; } /* Yellow/Warning */
+    .diag-small-text { font-size: 0.9em; opacity: 0.8; }
+
+
     /* Menu List Styles */
     .teacher-list, .category-list { list-style: none; padding: 0; margin: 0; }
 
@@ -302,6 +329,14 @@
         <ul class="teacher-list" id="menuList" style="display:none">
             <!-- Menu items will be generated here -->
         </ul>
+
+        <!-- New Diagnostics Section -->
+        <div id="diagnosticsArea" style="margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--color-dark-hover);">
+            <button id="runDiagnosticsBtn" title="Run Network Check">Run Diagnostics</button>
+            <div id="diagResults" style="margin-top: 10px; font-size: 0.85em;">
+                <p class="diag-warning">Click above to check critical network endpoints.</p>
+            </div>
+        </div>
     </div>
     
     <!-- MIDDLE COLUMN: VIDEO LIST FLYOUT (New Element) -->
@@ -373,6 +408,8 @@
     const flyoutHeaderTextEl = document.getElementById('flyoutHeaderText'); // Target the span for text
     const flyoutListEl = document.getElementById('flyoutList');
     const closeFlyoutBtn = document.getElementById('closeFlyoutBtn'); // New button element
+    const runDiagnosticsBtn = document.getElementById('runDiagnosticsBtn'); // New button element
+    const diagResultsEl = document.getElementById('diagResults'); // New results container
     
     // Existing elements
     const refreshBtn = document.getElementById('refreshBtn');
@@ -395,7 +432,16 @@
     }
 
     // Player functions
-    window.onYouTubeIframeAPIReady = function () { isPlayerReady = true; };
+    window.onYouTubeIframeAPIReady = function () { 
+        isPlayerReady = true; 
+        // We can update the diag message here if the API successfully loaded
+        const currentResult = diagResultsEl.innerHTML;
+        if (currentResult.includes("API Script") && currentResult.includes("FAIL")) {
+             // If the automated fetch failed but the script loaded, update the message
+             // This is a complex scenario, but we prioritize the script load success.
+             diagResultsEl.innerHTML += `<p class="diag-success"><strong>Player API Script:</strong> OK<br><span class="diag-small-text">Script loaded successfully.</span></p>`;
+        }
+    };
 
     function initializePlayer(initialVideoId) {
         // Only initialize the player if the API is ready
@@ -419,7 +465,20 @@
             events: {
                 onReady: onReady,
                 onStateChange: onStateChange,
-                onError: (e) => console.error('YouTube Player Error:', e.data)
+                onError: (e) => {
+                    console.error('YouTube Player Error:', e.data);
+                    const playerWrap = document.querySelector('.wrap');
+                    playerWrap.style.display = 'grid'; // Ensure the wrap is visible
+                    playerWrap.style.placeItems = 'center';
+                    // Updated error message to point to the new diagnostics tool
+                    playerWrap.innerHTML = `
+                        <div style="text-align:center; padding: 20px;">
+                            <h2 style="color: #ff6b6b;">Player Error (${e.data})</h2>
+                            <p>Cannot load the YouTube video. The embed service is likely blocked by your network.</p>
+                            <p style="font-weight: bold;">Run the "Diagnostics" check below to confirm which domains are blocked.</p>
+                        </div>
+                    `;
+                }
             }
         });
     }
@@ -789,14 +848,16 @@
             const playerWrap = document.querySelector('.wrap');
             playerWrap.style.display = 'grid'; // Ensure the wrap is visible
             playerWrap.style.placeItems = 'center';
+            // Updated error message to point to the new diagnostics tool
             playerWrap.innerHTML = `
                 <div style="text-align:center; padding: 20px;">
                     <h2 style="color: #ff6b6b;">Player Error</h2>
-                    <p>Cannot load the YouTube player. The required service may be blocked by your network security (Jamf).</p>
-                    <p>Video ID: ${newVideoId}</p>
+                    <p>Cannot load the YouTube player. The required service may be blocked by your network security.</p>
+                    <p style="font-weight: bold;">Run the "Diagnostics" check below the menu to confirm which domains are blocked.</p>
+                    <p style="font-size: 0.9em; opacity: 0.7;">Video ID: ${newVideoId}</p>
                 </div>
             `;
-            console.error("Attempted to play video but YouTube IFrame API was not ready.");
+            console.error("Attempted to play video but YouTube IFrame API was not ready or initialization failed.");
         }
 
         // Update selection styling within the flyout
@@ -820,6 +881,92 @@
         }
     });
 
+    // =========================================================================
+    // === 5. NETWORK DIAGNOSTICS TOOL =========================================
+    // =========================================================================
+
+    // Define the external endpoints to test
+    const DIAGNOSTIC_ENDPOINTS = [
+        // APPS_SCRIPT_API_URL is included in data fetch, but we test it again for a clear status
+        { name: "Live Data Source API", url: APPS_SCRIPT_API_URL, type: "data", expect: "cors" },
+        // CRITICAL: Checks if the core embed service is reachable
+        { name: "YouTube Embed Domain", url: "https://www.youtube-nocookie.com/embed/", type: "player", expect: "no-cors" }, 
+        // CRITICAL: Checks if the YouTube API script itself is reachable
+        { name: "YouTube API Script", url: "https://www.youtube.com/iframe_api", type: "api-script", expect: "no-cors" },
+    ];
+    const DIAG_TIMEOUT_MS = 3000; // 3 second timeout for quick diagnosis
+
+    /**
+     * Runs network checks against critical external endpoints.
+     */
+    async function runNetworkDiagnostics() {
+        diagResultsEl.innerHTML = '<p class="diag-warning">Running checks... please wait.</p>';
+        runDiagnosticsBtn.disabled = true;
+
+        const results = [];
+
+        for (const endpoint of DIAGNOSTIC_ENDPOINTS) {
+            let success = false;
+            let message = "Network check failed.";
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), DIAG_TIMEOUT_MS);
+                
+                // Use fetch for basic network connectivity check.
+                let response = await fetch(endpoint.url, {
+                    method: 'GET',
+                    // Use 'no-cors' for probing external sites like YouTube to bypass CORS policy
+                    // If fetching the Apps Script URL, use 'cors'
+                    mode: endpoint.expect,
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                // For 'no-cors' we only confirm fetch succeeded (no abort, no network error).
+                // For 'cors' (Apps Script), we check for a valid status.
+                if (endpoint.expect === "cors" && response.status !== 200) {
+                     throw new Error(`Server returned status ${response.status}`);
+                }
+                
+                success = true;
+                message = "Connection successful.";
+                
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    message = "Check timed out (3s). Highly likely a block or slow network.";
+                } else if (error instanceof TypeError) {
+                    message = "Network error (DNS, CORS, or Firewall block).";
+                } else {
+                    message = `Server/Network error: ${error.message}`;
+                }
+            }
+
+            results.push({ ...endpoint, success, message });
+        }
+
+        // Display results
+        diagResultsEl.innerHTML = '';
+        results.forEach(res => {
+            const statusClass = res.success ? 'diag-success' : 'diag-failure';
+            const statusText = res.success ? 'OK' : 'FAIL';
+            diagResultsEl.innerHTML += `
+                <p class="${statusClass}">
+                    <strong>${res.name}:</strong> ${statusText}<br>
+                    <span class="diag-small-text">${res.message}</span>
+                </p>
+            `;
+        });
+        
+        runDiagnosticsBtn.disabled = false;
+        runDiagnosticsBtn.textContent = 'Re-Run Diagnostics';
+    }
+
+
+    // =========================================================================
+    // === 6. EVENT LISTENERS ==================================================
+    // =========================================================================
 
     // Attach listener for the new refresh button
     if (refreshBtn) {
@@ -831,6 +978,11 @@
     // Attach listener for the new close flyout button
     if (closeFlyoutBtn) {
         closeFlyoutBtn.addEventListener('click', closeFlyout);
+    }
+    
+    // Attach listener for the new diagnostics button
+    if (runDiagnosticsBtn) {
+        runDiagnosticsBtn.addEventListener('click', runNetworkDiagnostics);
     }
 
 
