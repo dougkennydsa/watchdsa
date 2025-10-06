@@ -1,929 +1,329 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SharkTube – Collapsible Flyout Portal</title>
-  <!-- ADDED: Content Security Policy to ensure all requests use HTTPS, which can help with some strict network setups -->
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <style>
-    /* 1. Reset and Base Styles */
-    :root { 
-        --w: 960px; /* Target width for the player */
-        --menu-width: 350px; /* Sidebar width for longer teacher names */
-        --flyout-width: 400px; /* Width for the video list flyout for longer titles */
-        --color-accent: #BEA876; /* Gold/Accent Color for Teachers/Headers */
-        --color-primary-bg: #283891; /* Dark Blue for Sidebar/Flyout Background */
-        --color-bg-dark: #0b0d10;
-        --color-text-white: #FFFFFF; /* White for Categories/Videos */
-        --color-dark-hover: #3a4a9f; /* Slightly lighter shade of the background for hover state */
-    }
-    body { 
-        margin: 0; min-height: 100vh; background: var(--color-bg-dark); 
-        color: var(--color-text-white); font-family: system-ui, sans-serif;
-        display: flex; justify-content: center; align-items: flex-start; padding: 20px;
-    }
-    .container { 
-        display: flex; 
-        /* Total width: Player (960) + Sidebar (350) + Gaps (40) + Flyout (400) = 1750px */
-        width: calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px); 
-        max-width: 100%; 
-        gap: 20px; 
-        position: relative; 
-    }
-    /*
-      FIXED: Set content-area to fixed width so that .wrap and .controls 
-      inside it can take 100% of that width, keeping them aligned.
-    */
-    .content-area { 
-        flex-grow: 0; /* Prevent it from growing */
-        flex-shrink: 0; /* Prevent it from shrinking */
-        width: var(--w); /* Set it to the fixed player width */
-        display: flex;
-        flex-direction: column; /* Stack video and controls vertically */
-    }
-
-    /* 2. Sidebar (Menu) Styles */
-    #sidebar {
-        width: var(--menu-width);
-        background: var(--color-primary-bg); /* Use new blue background */
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 4px 12px rgba(0,0,0,.3);
-        max-height: calc(100vh - 40px);
-        overflow-y: auto; /* Keep auto for functionality */
-        position: relative; 
-        z-index: 10;
-        /* NEW: Hide scrollbar visually while keeping scrolling functionality */
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
-    }
-    /* NEW: Hide scrollbar visually for Webkit browsers (Chrome, Safari) */
-    #sidebar::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Header container now only holds the refresh button */
-    #sidebarHeader {
-        display: flex;
-        justify-content: flex-end; /* Push button to the right */
-        align-items: center;
-        margin-bottom: 10px; /* Add some space above the loading message/menu */
-    }
-    
-    #loadingMessage { padding: 10px; font-size: 0.9em; }
-
-    /* Refresh Button Style */
-    #refreshBtn {
-        background: var(--color-dark-hover);
-        color: var(--color-text-white);
-        border: none;
-        padding: 5px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1.1em;
-        line-height: 1;
-        transition: background-color 0.2s;
-    }
-    #refreshBtn:hover {
-        background: var(--color-accent);
-        color: var(--color-primary-bg);
-    }
-    
-    /* Diagnostics Button Style */
-    #runDiagnosticsBtn {
-        background: #e76f51; /* A reddish color for attention */
-        color: var(--color-text-white);
-        border: none;
-        padding: 8px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.95em;
-        line-height: 1;
-        transition: background-color 0.2s;
-        width: 100%; /* Make it full width of sidebar */
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-    #runDiagnosticsBtn:hover {
-        background: #f4a261; 
-    }
-
-    /* Diagnostics Results Styling */
-    #diagResults p { margin: 5px 0; padding: 5px 8px; border-radius: 4px; line-height: 1.3; }
-    .diag-success { background: #4caf50; color: white; border: 1px solid #388e3c; } /* Green */
-    .diag-failure { background: #f44336; color: white; border: 1px solid #d32f2f; } /* Red */
-    .diag-warning { background: #ffeb3b; color: #333; border: 1px solid #fbc02d; } /* Yellow/Warning */
-    .diag-small-text { font-size: 0.9em; opacity: 0.8; }
-
-
-    /* Menu List Styles */
-    .teacher-list, .category-list { list-style: none; padding: 0; margin: 0; }
-
-    /* --- Collapsible Headers (Teacher & Category) --- */
-    .teacher-header { 
-        font-weight: bold; 
-        font-size: 1.25em; 
-        color: var(--color-accent); /* Teachers in gold/accent color */
-        padding: 10px 5px; 
-        margin-top: 10px;
-        cursor: pointer; 
-        user-select: none;
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 2px solid var(--color-dark-hover);
-    }
-    .teacher-header::after { content: '+'; font-size: 1.2em; transition: transform 0.3s; }
-    .teacher-header.open::after { content: '-'; transform: rotate(0deg); }
-
-
-    .collapsible-header { 
-        padding: 8px 5px; 
-        margin-bottom: 5px; 
-        color: var(--color-text-white); /* Categories in white */
-        font-size: 1.0em;
-        font-weight: normal; 
-        cursor: pointer; 
-        user-select: none; 
-        display: flex; 
-        justify-content: space-between;
-        align-items: center; 
-        border-bottom: 1px solid var(--color-dark-hover); 
-        transition: background-color 0.2s;
-        padding-left: 25px; /* Indentation */
-    }
-    .collapsible-header:hover { background-color: var(--color-dark-hover); }
-
-    /* Chevron symbol for flyout */
-    .collapsible-header::after { 
-        content: '▸'; 
-        font-size: 1.1em; 
-        transition: transform 0.3s; 
-        margin-left: 10px;
-    }
-    
-    .collapsible-header.active { 
-        background-color: var(--color-accent); /* Active state uses gold accent color */
-        color: var(--color-primary-bg); /* Text color set to dark blue background */
-    }
-    
-    /* Content hiding/showing */
-    .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
-
-    /* --- Flyout Menu (Video List) --- */
-    #videoFlyout {
-        position: absolute;
-        top: 0;
-        left: calc(var(--menu-width) + 20px); 
-        width: var(--flyout-width);
-        background: var(--color-primary-bg); /* Use new blue background */
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 8px 8px 20px rgba(0,0,0,.5);
-        max-height: calc(100vh - 40px);
-        overflow-y: auto;
-        display: none; 
-        z-index: 20;
-    }
-    
-    /* Updated Flyout Header to include the close button */
-    #flyoutHeader { 
-        font-size: 1.3em; 
-        font-weight: bold; 
-        color: var(--color-accent); /* Flyout header in gold/accent color */
-        margin-bottom: 10px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid var(--color-dark-hover);
-        display: flex; /* Enable flex for alignment */
-        justify-content: space-between; /* Space out title and button */
-        align-items: center;
-    }
-    
-    /* Style for the new close button */
-    #closeFlyoutBtn {
-        background: none;
-        border: none;
-        color: var(--color-accent);
-        font-size: 1.5em; 
-        cursor: pointer;
-        padding: 0 5px;
-        line-height: 1;
-        transition: color 0.2s;
-    }
-    #closeFlyoutBtn:hover {
-        color: var(--color-text-white);
-    }
-    
-    .video-list { list-style: none; padding: 0; margin: 0; }
-    .video-list li {
-        padding: 8px 10px; 
-        cursor: pointer; 
-        border-left: 3px solid transparent;
-        transition: background-color 0.2s, border-left-color 0.2s; 
-        font-size: 0.95em;
-        line-height: 1.3;
-        white-space: normal; 
-        color: var(--color-text-white); /* Video titles in white */
-    }
-    .video-list li.selected { border-left-color: var(--color-accent); font-weight: bold; }
-    .video-list li:hover { background-color: var(--color-dark-hover); }
-
-    /* 3. Player & Controls */
-    /* .wrap and .controls are now children of .content-area, which has a fixed width. */
-    .wrap { 
-        position: relative; 
-        width: 100%; /* Takes full width of .content-area (960px) */
-        aspect-ratio: 16/9; 
-        background:#000; 
-        border-radius: 12px 12px 0 0; 
-        overflow:hidden; 
-        box-shadow: 0 8px 24px rgba(0,0,0,.4); 
-    }
-    #player { width: 100%; height: 100%; pointer-events: none; }   
-    
-    /* Control bar styling updated for time display */
-    .controls { 
-        width: 100%; /* Takes full width of .content-area (960px) */
-        background: var(--color-primary-bg); 
-        padding: 10px 15px; 
-        display: flex; 
-        align-items: center; 
-        gap: 15px; 
-        box-shadow: 0 8px 24px rgba(0,0,0,.4); 
-        border-radius: 0 0 12px 12px; 
-        font-size: 0.9em; /* Smaller font for time */
-    }
-    
-    /* Fullscreen Button Styling */
-    #fullscreenBtn {
-        background-color: var(--color-accent); 
-        color: var(--color-primary-bg); 
-        padding: 5px 10px;
-        border-radius: 6px;
-        font-weight: bold;
-        font-size: 0.9em;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        transition: opacity 0.2s;
-        flex-shrink: 0; /* Prevents button from shrinking in the flex container */
-        margin-left: auto; /* Pushes the button to the far right */
-    }
-    #fullscreenBtn:hover {
-        opacity: 0.9;
-    }
-
-    .btn { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
-    #seekRange { flex-grow: 1; }
-    input[type="range"] { -webkit-appearance: none; appearance: none; height: 5px; background: #555; cursor: pointer; border-radius: 5px;}
-    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; border-radius: 50%; background: var(--color-accent); cursor: pointer; }
-    .finished { position:absolute; inset:0; display:grid; place-items:center; background:var(--color-bg-dark); text-align:center; padding:2rem; }
-
-    /* --- FULLSCREEN STYLES (Applies when content-area enters fullscreen) --- */
-    .content-area:fullscreen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        z-index: 21; /* Higher than flyout z-index: 20 */
-        background-color: var(--color-bg-dark); 
-        display: flex;
-        flex-direction: column;
-        justify-content: center; /* Center content vertically */
-        align-items: center; /* Center content horizontally */
-    }
-    
-    /* Video container must occupy maximum space but maintain aspect ratio */
-    .content-area:fullscreen .wrap {
-        width: 100%;
-        max-width: 100%;
-        flex-grow: 1; 
-        /* The key to fix clipping: use object-fit equivalent for the container */
-        max-height: calc(100vh - 60px); /* Account for controls height */
-        aspect-ratio: 16/9; /* Maintain ratio */
-        object-fit: contain; /* Ensure the video scales down if height is limited */
-        margin: auto; /* Center the video block */
-        border-radius: 0;
-        box-shadow: none;
-    }
-    .content-area:fullscreen .controls {
-        flex-shrink: 0;
-        border-radius: 0;
-        width: 100%; /* Ensure controls span full width in fullscreen */
-    }
-    .content-area:fullscreen .finished {
-        width: 100%;
-        height: 100%;
-        padding-top: 50px; 
-    }
-    /* ---------------------------------------------------------------------- */
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SharkTube – Collapsible Flyout Portal</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <style>
+    :root{--w:960px;--menu-width:300px;--flyout-width:350px;--color-accent:#BEA876;--color-primary-bg:#283891;--color-bg-dark:#0b0d10;--color-text-white:#fff;--color-dark-hover:#3a4a9f}
+    body{margin:0;min-height:100vh;background:var(--color-bg-dark);color:var(--color-text-white);font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:20px}
+    .container{display:flex;width:calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px);max-width:100%;gap:20px;position:relative}
+    .content-area{flex-grow:1}
+    #sidebar{width:var(--menu-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.3);max-height:calc(100vh - 40px);overflow-y:auto;position:relative;z-index:10}
+    #sidebarHeader{display:flex;justify-content:flex-end;align-items:center;margin-bottom:10px}
+    #loadingMessage{padding:10px;font-size:.9em}
+    #refreshBtn{background:var(--color-dark-hover);color:var(--color-text-white);border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:1.1em;line-height:1;transition:background-color .2s}
+    #refreshBtn:hover{background:var(--color-accent);color:var(--color-primary-bg)}
+    .teacher-list,.category-list{list-style:none;padding:0;margin:0}
+    .teacher-header{font-weight:700;font-size:1.25em;color:var(--color-accent);padding:10px 5px;margin-top:10px;cursor:pointer;user-select:none;display:flex;justify-content:space-between;border-bottom:2px solid var(--color-dark-hover)}
+    .teacher-header::after{content:'+';font-size:1.2em;transition:transform .3s}
+    .teacher-header.open::after{content:'-'}
+    .collapsible-header{padding:8px 5px;margin-bottom:5px;color:var(--color-text-white);font-size:1em;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-dark-hover);transition:background-color .2s;padding-left:25px}
+    .collapsible-header:hover{background-color:var(--color-dark-hover)}
+    .collapsible-header::after{content:'▸';font-size:1.1em;transition:transform .3s;margin-left:10px}
+    .collapsible-header.active{background-color:var(--color-accent);color:var(--color-primary-bg)}
+    .collapsible-content{max-height:0;overflow:hidden;transition:max-height .4s ease-in-out}
+    #videoFlyout{position:absolute;top:0;left:calc(var(--menu-width) + 20px);width:var(--flyout-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:8px 8px 20px rgba(0,0,0,.5);max-height:calc(100vh - 40px);overflow-y:auto;display:none;z-index:20}
+    #flyoutHeader{font-size:1.3em;font-weight:700;color:var(--color-accent);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--color-dark-hover);display:flex;justify-content:space-between;align-items:center}
+    #closeFlyoutBtn{background:none;border:none;color:var(--color-accent);font-size:1.5em;cursor:pointer;padding:0 5px;line-height:1;transition:color .2s}
+    #closeFlyoutBtn:hover{color:var(--color-text-white)}
+    .video-list{list-style:none;padding:0;margin:0}
+    .video-list li{padding:8px 10px;cursor:pointer;border-left:3px solid transparent;transition:background-color .2s,border-left-color .2s;font-size:.95em;line-height:1.3;white-space:normal;color:var(--color-text-white)}
+    .video-list li.selected{border-left-color:var(--color-accent);font-weight:700}
+    .video-list li:hover{background-color:var(--color-dark-hover)}
+    .wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px 12px 0 0;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    #player{width:100%;height:100%;pointer-events:none}
+    .controls{width:100%;background:var(--color-primary-bg);padding:10px 15px;display:flex;align-items:center;gap:15px;box-shadow:0 8px 24px rgba(0,0,0,.4);border-radius:0 0 12px 12px;font-size:.9em}
+    #fullscreenBtn{background-color:var(--color-accent);color:var(--color-primary-bg);padding:5px 10px;border-radius:6px;font-weight:700;font-size:.9em;letter-spacing:.05em;text-transform:uppercase;transition:opacity .2s;flex-shrink:0;margin-left:auto}
+    #fullscreenBtn:hover{opacity:.9}
+    .btn{background:none;border:none;color:#fff;cursor:pointer;font-size:20px}
+    #seekRange{flex-grow:1}
+    input[type=range]{-webkit-appearance:none;appearance:none;height:5px;background:#555;cursor:pointer;border-radius:5px}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:15px;height:15px;border-radius:50%;background:var(--color-accent);cursor:pointer}
+    .finished{position:absolute;inset:0;display:grid;place-items:center;background:var(--color-bg-dark);text-align:center;padding:2rem}
+    .content-area:fullscreen{position:fixed;top:0;left:0;width:100vw;height:100vh;margin:0;padding:0;z-index:21;background-color:var(--color-bg-dark);display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .content-area:fullscreen .wrap{width:100%;max-width:100%;flex-grow:1;max-height:calc(100vh - 60px);aspect-ratio:16/9;object-fit:contain;margin:auto;border-radius:0;box-shadow:none}
+    .content-area:fullscreen .controls{flex-shrink:0;border-radius:0;width:100%}
+    .content-area:fullscreen .finished{width:100%;height:100%;padding-top:50px}
+  </style>
 </head>
 <body>
-  <div class="container">
-    
-    <!-- LEFT COLUMN: DYNAMIC MENU SIDEBAR (Teacher -> Category) -->
-    <div id="sidebar">
-        <!-- New sidebar header container for title and refresh button -->
-        <div id="sidebarHeader">
-            <!-- Video Library title removed here -->
-            <button id="refreshBtn" title="Refresh Video List">↻</button>
-        </div>
-        
-        <p id="loadingMessage">Loading videos...</p>
-        <ul class="teacher-list" id="menuList" style="display:none">
-            <!-- Menu items will be generated here -->
-        </ul>
+  <div class="container">
+    <!-- LEFT: Sidebar -->
+    <div id="sidebar">
+      <div id="sidebarHeader">
+        <button id="refreshBtn" title="Refresh Video List">↻</button>
+      </div>
+      <p id="loadingMessage">Loading videos...</p>
+      <ul class="teacher-list" id="menuList" style="display:none"></ul>
+    </div>
 
-        <!-- New Diagnostics Section -->
-        <div id="diagnosticsArea" style="margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--color-dark-hover);">
-            <button id="runDiagnosticsBtn" title="Run Network Check">Run Diagnostics</button>
-            <div id="diagResults" style="margin-top: 10px; font-size: 0.85em;">
-                <p class="diag-warning">Click above to check critical network endpoints.</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MIDDLE COLUMN: VIDEO LIST FLYOUT (New Element) -->
-    <div id="videoFlyout" style="display:none;">
-        <div id="flyoutHeader">
-            <!-- Header text is now in a span for separate control from button -->
-            <span id="flyoutHeaderText">Videos in Category</span>
-            <button id="closeFlyoutBtn" title="Close Video List">←</button>
-        </div>
-        <ul class="video-list" id="flyoutList">
-            <!-- Video list will be generated here on category click -->
-        </ul>
-    </div>
+    <!-- MIDDLE: Flyout -->
+    <div id="videoFlyout" style="display:none;">
+      <div id="flyoutHeader">
+        <span id="flyoutHeaderText">Videos in Category</span>
+        <button id="closeFlyoutBtn" title="Close Video List">←</button>
+      </div>
+      <ul class="video-list" id="flyoutList"></ul>
+    </div>
 
-    <!-- RIGHT COLUMN: VIDEO PLAYER & CONTROLS -->
-    <div class="content-area">
-        <div class="wrap">
-            <div id="player" referrerpolicy="strict-origin-when-cross-origin"></div>
-            <div class="finished" id="finished" style="display:none">
-                <div>
-                    <h2>All done.</h2>
-                    <p>This video has ended. Click a title on the left to watch another.</p>
-                </div>
-            </div>
-        </div>
+    <!-- RIGHT: Player & Controls -->
+    <div class="content-area">
+      <div class="wrap">
+        <div id="player" referrerpolicy="strict-origin-when-cross-origin"></div>
+        <div class="finished" id="finished" style="display:none">
+          <div>
+            <h2>All done.</h2>
+            <p>This video has ended. Click a title on the left to watch another.</p>
+          </div>
+        </div>
+      </div>
+      <div class="controls" id="controls" style="display:none;">
+        <button class="btn" id="playPauseBtn">▶</button>
+        <span id="currentTimeSpan">0:00</span>
+        <input type="range" id="seekRange" min="0" max="100" value="0">
+        <span id="durationSpan">0:00</span>
+        <input type="range" id="volumeRange" min="0" max="100" value="100" style="width:80px;">
+        <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">FULLSCREEN</button>
+      </div>
+    </div>
+  </div>
 
-        <!-- Custom Control Bar with Time Display and Fullscreen Button -->
-        <div class="controls" id="controls" style="display:none;">
-            <button class="btn" id="playPauseBtn">▶</button>
-            <span id="currentTimeSpan">0:00</span>
-            <input type="range" id="seekRange" min="0" max="100" value="0">
-            <span id="durationSpan">0:00</span>
-            <input type="range" id="volumeRange" min="0" max="100" value="100" style="width: 80px;">
-            <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">FULLSCREEN</button> 
-        </div>
-    </div>
-  </div>
+  <!-- YouTube API (menu works even if this is blocked) -->
+  <script src="https://www.youtube.com/iframe_api" referrerpolicy="strict-origin-when-cross-origin"></script>
+  <script>
+    // -------------------- Config --------------------
+    const JSON_URL = './videos.json'; // local-only source of truth
 
-  <!-- Load the YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api" referrerpolicy="strict-origin-when-cross-origin"></script>
-  <script>
-    // =========================================================================
-    // === 1. DATA CONFIGURATION (Now only using local data) ===================
-    // =========================================================================
+    // -------------------- State ---------------------
+    let VIDEO_DATA = [];
+    let player, updateTimer, isPlayerReady = false;
+    let activeCategoryHeader = null;
+    let pendingVideoId = null;
 
-    let VIDEO_DATA = [];
-    
-    // =========================================================================
-    // === 2. PLAYER & CONTROL LOGIC ===========================================
-    // =========================================================================
-    
-    const ORIGIN = location.origin; 
-    let player;
-    let updateTimer; 
-    let isPlayerReady = false;
-    let activeCategoryHeader = null; // New global to track the currently active category header
+    // -------------------- DOM -----------------------
+    const finishedEl = document.getElementById('finished');
+    const controlsEl = document.getElementById('controls');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const seekRange = document.getElementById('seekRange');
+    const volumeRange = document.getElementById('volumeRange');
+    const menuListEl = document.getElementById('menuList');
+    const loadingMessageEl = document.getElementById('loadingMessage');
+    const flyoutEl = document.getElementById('videoFlyout');
+    const flyoutHeaderTextEl = document.getElementById('flyoutHeaderText');
+    const flyoutListEl = document.getElementById('flyoutList');
+    const closeFlyoutBtn = document.getElementById('closeFlyoutBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const currentTimeSpan = document.getElementById('currentTimeSpan');
+    const durationSpan = document.getElementById('durationSpan');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const contentAreaEl = document.querySelector('.content-area');
 
-    // DOM Elements
-    const finishedEl = document.getElementById('finished');
-    const controlsEl = document.getElementById('controls');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const seekRange = document.getElementById('seekRange');
-    const volumeRange = document.getElementById('volumeRange');
-    const menuListEl = document.getElementById('menuList');
-    const loadingMessageEl = document.getElementById('loadingMessage');
-    const flyoutEl = document.getElementById('videoFlyout');
-    const flyoutHeaderTextEl = document.getElementById('flyoutHeaderText'); // Target the span for text
-    const flyoutListEl = document.getElementById('flyoutList');
-    const closeFlyoutBtn = document.getElementById('closeFlyoutBtn'); // New button element
-    const runDiagnosticsBtn = document.getElementById('runDiagnosticsBtn'); // New button element
-    const diagResultsEl = document.getElementById('diagResults'); // New results container
-    
-    // Existing elements
-    const refreshBtn = document.getElementById('refreshBtn');
-    const currentTimeSpan = document.getElementById('currentTimeSpan');
-    const durationSpan = document.getElementById('durationSpan');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const contentAreaEl = document.querySelector('.content-area');
-    
-    /**
-     * Helper function to format seconds into M:SS string.
-     * @param {number} seconds 
-     * @returns {string}
-     */
-    function formatTime(seconds) {
-        if (isNaN(seconds) || seconds < 0) return '0:00';
-        const minutes = Math.floor(seconds / 60);
-        // Ensure seconds are always two digits, e.g., 05 instead of 5
-        const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${minutes}:${remainingSeconds}`;
-    }
+    // -------------------- Utils ---------------------
+    function formatTime(s){ if(isNaN(s)||s<0) return '0:00'; const m=Math.floor(s/60); const ss=String(Math.floor(s%60)).padStart(2,'0'); return `${m}:${ss}`; }
 
-    // Player functions
-    window.onYouTubeIframeAPIReady = function () { 
-        isPlayerReady = true; 
-        // If the player API successfully loaded, update the message if diagnostics were run
-        if (diagResultsEl.innerHTML.includes("FAIL")) {
-             // This handles the case where the script might load after a diagnostic failure
-             console.log("YouTube API Script loaded late but successfully.");
-        }
-    };
+    // -------------------- YouTube -------------------
+    window.onYouTubeIframeAPIReady = function () {
+      isPlayerReady = true;
+      const first = pendingVideoId || VIDEO_DATA[0]?.categories?.[0]?.videos?.[0]?.id;
+      if (first) initializePlayer(first);
+    };
 
-    function initializePlayer(initialVideoId) {
-        // Only initialize the player if the API is ready
-        if (!isPlayerReady) {
-            console.warn("YouTube IFrame API not ready. Cannot initialize player.");
-            return;
-        }
+    function initializePlayer(initialVideoId) {
+      if (player) { try { player.destroy(); } catch {} if (updateTimer) clearInterval(updateTimer); }
+      player = new YT.Player('player', {
+        videoId: initialVideoId,
+        host: 'https://www.youtube-nocookie.com',
+        playerVars: { controls:0, disablekb:1, rel:0, fs:0, iv_load_policy:3, modestbranding:1, playsinline:1, enablejsapi:1, origin: location.origin },
+        events: { onReady, onStateChange, onError: e => console.error('YouTube Player Error:', e.data) }
+      });
+    }
 
-        if (player) {
-            try { player.destroy(); } catch (e) { /* silent fail */ }
-            if (updateTimer) clearInterval(updateTimer);
-        }
+    function onReady(){
+      controlsEl.style.display='flex';
+      player.setVolume(100);
+      durationSpan.textContent = formatTime(player.getDuration());
+      playPauseBtn.addEventListener('click', togglePlayPause);
+      volumeRange.addEventListener('input', () => player.setVolume(parseInt(volumeRange.value,10)));
+      seekRange.addEventListener('change', () => {
+        const d = player.getDuration(); player.seekTo((seekRange.value/100)*d,true);
+        if (player.getPlayerState() !== YT.PlayerState.PLAYING){ player.playVideo(); playPauseBtn.textContent='⏸'; }
+      });
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      if (updateTimer) clearInterval(updateTimer);
+      updateTimer = setInterval(updatePlayerState, 1000);
+      if (pendingVideoId) { player.cueVideoById(pendingVideoId); pendingVideoId=null; }
+    }
 
-        player = new YT.Player('player', {
-            videoId: initialVideoId,
-            host: 'https://www.youtube-nocookie.com', 
-            playerVars: {
-                controls: 0, disablekb: 1, rel: 0, fs: 0, iv_load_policy: 3, modestbranding: 1, playsinline: 1,
-                enablejsapi: 1, origin: ORIGIN
-            },
-            events: {
-                onReady: onReady,
-                onStateChange: onStateChange,
-                onError: (e) => {
-                    console.error('YouTube Player Error:', e.data);
-                    const playerWrap = document.querySelector('.wrap');
-                    playerWrap.style.display = 'grid'; // Ensure the wrap is visible
-                    playerWrap.style.placeItems = 'center';
-                    // Updated error message to point to the new diagnostics tool
-                    playerWrap.innerHTML = `
-                        <div style="text-align:center; padding: 20px;">
-                            <h2 style="color: #ff6b6b;">Player Error (${e.data})</h2>
-                            <p>Cannot load the YouTube video. The embed service is likely blocked by your network.</p>
-                            <p style="font-weight: bold;">Run the "Diagnostics" check below to confirm which domains are blocked.</p>
-                        </div>
-                    `;
-                }
-            }
-        });
-    }
+    function onStateChange(e){
+      if (e.data === YT.PlayerState.ENDED){
+        if (updateTimer) clearInterval(updateTimer);
+        try { player.cueVideoById(player.getVideoData().video_id); } catch {}
+        controlsEl.style.display='none'; finishedEl.style.display='grid';
+      }
+    }
+    function updatePlayerState(){
+      if (!(player && player.getPlayerState)) return;
+      const state = player.getPlayerState(), t = player.getCurrentTime(), d = player.getDuration();
+      currentTimeSpan.textContent = formatTime(t);
+      if (d > 0 && durationSpan.textContent === '0:00') durationSpan.textContent = formatTime(d);
+      if (state === YT.PlayerState.PLAYING){ seekRange.value = (t/d)*100; playPauseBtn.textContent='⏸'; }
+      else if (state === YT.PlayerState.PAUSED){ playPauseBtn.textContent='▶'; }
+    }
+    function togglePlayPause(){ const s = player.getPlayerState(); if (s===YT.PlayerState.PLAYING){ player.pauseVideo(); playPauseBtn.textContent='▶'; } else { player.playVideo(); playPauseBtn.textContent='⏸'; } }
+    function toggleFullscreen(){ if (!document.fullscreenElement){ contentAreaEl.requestFullscreen?.().catch(err=>console.error('Fullscreen error:',err)); } else { document.exitFullscreen?.(); } }
+    function handleFullscreenChange(){ fullscreenBtn.textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'FULLSCREEN'; }
 
-    function onReady(e) {
-      controlsEl.style.display = 'flex';
-      player.setVolume(100);
-      
-      // Set initial duration time display
-      const duration = player.getDuration();
-      durationSpan.textContent = formatTime(duration);
+    // -------------------- Data (local only) --------
+    async function loadLocalData(){
+      menuListEl.style.display='none';
+      flyoutEl.style.display='none';
+      loadingMessageEl.style.display='block';
+      loadingMessageEl.textContent='Loading videos...';
 
-      playPauseBtn.addEventListener('click', togglePlayPause);
-      volumeRange.addEventListener('input', setVolume);
-      seekRange.addEventListener('change', seekVideo);
+      try{
+        // cache-buster so we always pull the latest artifact written by Actions
+        const res = await fetch(`${JSON_URL}?t=${Date.now()}`, { cache:'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) throw new Error('videos.json is empty or malformed');
 
-      // --- Fullscreen Logic Initialization ---
-      fullscreenBtn.addEventListener('click', toggleFullscreen);
-      // Listen for the browser's fullscreen event to update the button icon
-      document.addEventListener('fullscreenchange', handleFullscreenChange); 
-      // ---------------------------------------
-      
-      if (updateTimer) clearInterval(updateTimer); 
-      updateTimer = setInterval(updatePlayerState, 1000);
-    }
-    
-    function togglePlayPause() {
-        const state = player.getPlayerState();
-        if (state === YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-            playPauseBtn.textContent = '▶';
-        } else if (state === YT.PlayerState.PAUSED || state === YT.PlayerState.CUED) {
-            player.playVideo();
-            playPauseBtn.textContent = '⏸';
-        }
-    }
-    function setVolume() {
-        const volume = parseInt(volumeRange.value, 10);
-        player.setVolume(volume);
-    }
-    function seekVideo() {
-        const duration = player.getDuration();
-        const seekToTime = (seekRange.value / 100) * duration;
-        player.seekTo(seekToTime, true);
-        if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
-            player.playVideo();
-            playPauseBtn.textContent = '⏸';
-        }
-    }
-    
-    function updatePlayerState() {
-        if (player && player.getPlayerState) {
-            const state = player.getPlayerState();
-            const currentTime = player.getCurrentTime();
-            const duration = player.getDuration();
-            
-            // Update time displays
-            currentTimeSpan.textContent = formatTime(currentTime);
-            if (duration > 0 && durationSpan.textContent === '0:00') {
-                durationSpan.textContent = formatTime(duration);
-            }
+        VIDEO_DATA = data;
+        renderMenu();
+        loadingMessageEl.style.display='none';
+        menuListEl.style.display='block';
 
-            if (state === YT.PlayerState.PLAYING) {
-                const percentage = (currentTime / duration) * 100;
-                seekRange.value = percentage;
-                playPauseBtn.textContent = '⏸';
-            } else if (state === YT.PlayerState.PAUSED) {
-                playPauseBtn.textContent = '▶';
-            }
-        }
-    }
-
-    // --- Fullscreen Functions ---
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            // Enter fullscreen mode on the content-area element
-            if (contentAreaEl.requestFullscreen) {
-                contentAreaEl.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
-            }
-        } else {
-            // Exit fullscreen mode
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-    }
-
-    function handleFullscreenChange() {
-        if (document.fullscreenElement) {
-            // In fullscreen mode: show EXIT FULLSCREEN
-            fullscreenBtn.textContent = 'EXIT FULLSCREEN'; 
-        } else {
-            // Not in fullscreen mode: show FULLSCREEN
-            fullscreenBtn.textContent = 'FULLSCREEN'; 
-        }
-    }
-    // --------------------------------
-
-    
-    function onStateChange(e) {
-      if (e.data === YT.PlayerState.ENDED) { 
-        if (updateTimer) clearInterval(updateTimer);
-        try { 
-            player.cueVideoById(player.getVideoData().video_id);
-        } catch (error) { 
-            console.warn('Player stopping error:', error); 
-        }
-        controlsEl.style.display = 'none';
-        finishedEl.style.display = 'grid';
-      }
-    }
-    
-    addEventListener('contextmenu', (e) => e.preventDefault());
-    addEventListener('keydown', (e) => {
-        // Allow the native F11 key (or F key) for fullscreen if user prefers that, 
-        // but block other native YouTube shortcuts
-        const blocked = ['ArrowLeft', 'ArrowRight', 'c', 'm'];
-        if (blocked.includes(e.key.toLowerCase())) { e.preventDefault(); e.stopPropagation(); }
-    }, { passive: false });
-    
-    // =========================================================================
-    // === 3. DATA FETCHING (ONLY FROM local videos.json) ======================
-    // =========================================================================
-
-    /**
-     * Fetches video data ONLY from the local 'videos.json' file, as requested
-     * to eliminate API/network issues.
-     */
-    async function fetchDataAndBuildMenu() {
-        // Reset UI state before fetching data
-        menuListEl.style.display = 'none';
-        flyoutEl.style.display = 'none';
-        loadingMessageEl.style.display = 'block';
-        // Inform user we are loading from the static file
-        loadingMessageEl.innerHTML = `Loading videos from **videos.json**...`; 
-        
-        try {
-            // Attempt to fetch from the local JSON file
-            const localResponse = await fetch('./videos.json', { cache: 'no-store' });
-            if (!localResponse.ok) {
-                throw new Error(`Local videos.json not found or unavailable (Status: ${localResponse.status})`);
-            }
-            VIDEO_DATA = await localResponse.json();
-            
-            if (!Array.isArray(VIDEO_DATA) || VIDEO_DATA.length === 0) {
-                throw new Error('The videos.json file is empty or improperly formatted.');
-            }
-            console.log("Successfully loaded data from local videos.json.");
-
-        } catch (error) {
-            // If local load fails, show fatal error
-            console.error('FATAL LOAD ERROR: Failed to load data from videos.json.', error);
-            loadingMessageEl.innerHTML = `
-                <p style="color:red; font-weight:bold;">FATAL LOAD ERROR:</p>
-                <p>Failed to load videos from the local backup file (videos.json). Please ensure the file exists and is accessible.</p>
-                <p class="diag-small-text">Error: ${error.message}</p>
-            `;
-            return; // Stop execution
-        }
-
-        // Proceed with initialization using the loaded data
-        loadingMessageEl.style.display = 'none';
-        menuListEl.style.display = 'block';
-        
-        // 1. Render the menu
-        renderMenu(); 
-                
-        // 2. Default UI state: Open the first Teacher and Category
-        const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
-        if (firstTeacherHeader) {
-            const firstTeacherContent = firstTeacherHeader.nextElementSibling;
-            toggleCollapse(firstTeacherHeader, firstTeacherContent);
-            
-            const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
-            if(firstCategoryHeader) {
-                // Automatically open the flyout for the first category
-                handleCategoryClick({currentTarget: firstCategoryHeader});
-            }
-        }
-
-        // 3. Now, ONLY wait for the YouTube API to be ready before initializing the player.
-        const checkReady = setInterval(() => {
-            if (isPlayerReady) {
-                clearInterval(checkReady);
-                
-                // Find the first video ID to initialize the player safely
-                const firstVideo = VIDEO_DATA[0]?.categories?.[0]?.videos?.[0];
-                if (firstVideo) {
-                    initializePlayer(firstVideo.id);
-                } else {
-                    console.warn("No video data found to initialize player.");
-                }
-            }
-        }, 100);
-    }
-    
-    // =========================================================================
-    // === 4. MENU GENERATION & BEHAVIOR =======================================
-    // =========================================================================
-
-    function toggleCollapse(header, content) {
-        const isOpen = header.classList.contains('open');
-        // Close all other teacher menus first
-        document.querySelectorAll('.teacher-header').forEach(h => {
-            if (h !== header && h.classList.contains('open')) {
-                h.classList.remove('open');
-                h.nextElementSibling.style.maxHeight = '0';
-            }
-        });
-        
-        // Toggle the clicked one
-        if (isOpen) {
-            header.classList.remove('open');
-            content.style.maxHeight = '0';
-            // If closing a teacher, ensure flyout is closed too
-            closeFlyout();
-        } else {
-            header.classList.add('open');
-            // Set height toscrollHeight to enable CSS transition
-            content.style.maxHeight = content.scrollHeight + 'px';
-        }
-    }
-
-    function handleCategoryClick(e) {
-        const categoryHeader = e.currentTarget;
-        
-        // Deselect any previously active category
-        if (activeCategoryHeader && activeCategoryHeader !== categoryHeader) {
-            activeCategoryHeader.classList.remove('active');
-        }
-
-        // Toggle active state and flyout
-        const isActive = categoryHeader.classList.toggle('active');
-
-        if (isActive) {
-            activeCategoryHeader = categoryHeader;
-            const categoryName = categoryHeader.textContent;
-            const videos = JSON.parse(categoryHeader.dataset.videos);
-            openFlyout(categoryName, videos);
-        } else {
-            activeCategoryHeader = null;
-            closeFlyout();
-        }
-        e.stopPropagation(); // Prevent event from bubbling up to the teacher header if it was used for the content height trick
-    }
-
-    function openFlyout(categoryName, videos) {
-        flyoutHeaderTextEl.textContent = categoryName;
-        flyoutListEl.innerHTML = ''; // Clear previous videos
-        
-        videos.forEach(video => {
-            const li = document.createElement('li');
-            li.textContent = video.title;
-            li.dataset.id = video.id;
-            li.addEventListener('click', (e) => {
-                loadVideo(video.id);
-                // Highlight selected video
-                flyoutListEl.querySelectorAll('li').forEach(item => item.classList.remove('selected'));
-                e.currentTarget.classList.add('selected');
-                // closeFlyout(); // Optionally close the flyout after selection
-            });
-            flyoutListEl.appendChild(li);
-        });
-        
-        flyoutEl.style.display = 'block';
-    }
-
-    function closeFlyout() {
-        flyoutEl.style.display = 'none';
-        if (activeCategoryHeader) {
-            activeCategoryHeader.classList.remove('active');
-            activeCategoryHeader = null;
-        }
-    }
-
-    function loadVideo(videoId) {
-        if (player && player.loadVideoById) {
-            player.loadVideoById(videoId);
-            finishedEl.style.display = 'none'; // Hide finished message
-            controlsEl.style.display = 'flex'; // Show controls
-        } else {
-            initializePlayer(videoId);
-        }
-    }
-
-
-    function renderMenu() {
-        menuListEl.innerHTML = ''; 
-        
-        VIDEO_DATA.forEach(teacherItem => {
-            const teacherHeader = document.createElement('div');
-            teacherHeader.className = 'teacher-header';
-            teacherHeader.textContent = teacherItem.teacher;
-            
-            const teacherContent = document.createElement('div');
-            teacherContent.className = 'collapsible-content teacher-content';
-
-            const categoryUl = document.createElement('ul');
-            categoryUl.classList.add('category-list');
-            
-            teacherItem.categories.forEach(categoryItem => {
-                const categoryHeader = document.createElement('div');
-                categoryHeader.className = 'collapsible-header';
-                categoryHeader.textContent = categoryItem.name;
-                categoryHeader.dataset.videos = JSON.stringify(categoryItem.videos); // Store videos for flyout
-                
-                // Attach click handler to open flyout
-                categoryHeader.addEventListener('click', handleCategoryClick);
-
-                const categoryLi = document.createElement('li');
-                categoryLi.appendChild(categoryHeader);
-                categoryUl.appendChild(categoryLi);
-            });
-            
-            teacherContent.appendChild(categoryUl);
-            teacherHeader.addEventListener('click', (e) => {
-                 // Teacher click should toggle collapse
-                 toggleCollapse(teacherHeader, teacherContent);
-                 e.stopPropagation(); 
-            });
-
-            const teacherLi = document.createElement('li');
-            teacherLi.appendChild(teacherHeader);
-            teacherLi.appendChild(teacherContent);
-            menuListEl.appendChild(teacherLi);
-        });
-    }
-
-    // =========================================================================
-    // === 5. DIAGNOSTICS (Simplified) =========================================
-    // =========================================================================
-
-    /**
-     * Helper to run an individual network check with a timeout.
-     * @param {string} url - The URL to check.
-     * @param {number} timeout - Timeout in milliseconds.
-     * @returns {Promise<{success: boolean, message: string}>}
-     */
-    async function checkUrl(url, timeout) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-        try {
-            const response = await fetch(url, { 
-                method: 'GET', 
-                mode: 'cors', 
-                signal: controller.signal 
-            });
-            clearTimeout(timeoutId);
-            if (response.ok) {
-                return { success: true, message: `Status: ${response.status}. Domain is reachable.` };
-            } else {
-                return { success: false, message: `Status: ${response.status}. Domain responded, but not with a success code. This may be a soft block.` };
-            }
-        } catch (error) {
-            clearTimeout(timeoutId);
-            if (error.name === 'AbortError') {
-                return { success: false, message: `Request timed out after ${timeout / 1000} seconds. Domain is likely blocked or extremely slow.` };
-            }
-            return { success: false, message: `Network error: Domain could not be reached. Check firewall/proxy rules for this domain.` };
+        // Auto-open first teacher/category; init player if possible
+        const firstId = VIDEO_DATA[0]?.categories?.[0]?.videos?.[0]?.id;
+        pendingVideoId = firstId || null;
+        const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
+        if (firstTeacherHeader){
+          const firstTeacherContent = firstTeacherHeader.nextElementSibling;
+          toggleCollapse(firstTeacherHeader, firstTeacherContent);
+          const firstCategoryHeader = firstTeacherContent?.querySelector('.collapsible-header');
+          if (firstCategoryHeader) handleCategoryClick({ currentTarget:firstCategoryHeader, stopPropagation(){ } });
         }
+        if (isPlayerReady && firstId) initializePlayer(firstId);
+
+        // Soft notice if YouTube API is blocked
+        setTimeout(()=>{ if (!isPlayerReady) console.warn('YouTube API unavailable — menu usable, player offline.'); }, 3000);
+      }catch(err){
+        console.error('FATAL: failed to load videos.json', err);
+        loadingMessageEl.innerHTML = `<p style="color:#ff6b6b;font-weight:bold">Could not load videos.json</p><p>${err.message}</p>`;
+      }
     }
 
-    /**
-     * Runs network diagnostics against critical YouTube endpoints.
-     */
-    async function runNetworkDiagnostics() {
-        runDiagnosticsBtn.disabled = true;
-        runDiagnosticsBtn.textContent = 'Running...';
-        diagResultsEl.innerHTML = '<p class="diag-warning">Checking network connectivity...</p>';
+    // -------------------- Menu ---------------------
+    function renderMenu(){
+      menuListEl.innerHTML='';
+      VIDEO_DATA.forEach(teacherItem=>{
+        const teacherHeader = document.createElement('div');
+        teacherHeader.className='teacher-header';
+        teacherHeader.textContent = teacherItem.teacher;
 
-        // Since we are no longer using the Apps Script API, we remove that check.
-        // We only check the critical YouTube domains.
-        const checks = [
-            {
-                name: 'YouTube Embed Domain',
-                url: 'https://www.youtube-nocookie.com',
-                message: 'Checks if the secure video embed domain is reachable.',
-                timeout: 5000 // 5 seconds
-            },
-            {
-                name: 'YouTube Player API Script',
-                url: 'https://www.youtube.com/iframe_api',
-                message: 'Checks if the YouTube Player API script can be loaded.',
-                timeout: 5000
-            }
-        ];
+        const teacherContent = document.createElement('div');
+        teacherContent.className='collapsible-content teacher-content';
 
-        const promises = checks.map(c => checkUrl(c.url, c.timeout).then(res => ({
-            name: c.name,
-            success: res.success,
-            message: res.message
-        })));
+        const categoryUl = document.createElement('ul');
+        categoryUl.classList.add('category-list');
 
-        const results = await Promise.all(promises);
+        teacherItem.categories.forEach(categoryItem=>{
+          const categoryHeader = document.createElement('div');
+          categoryHeader.className='collapsible-header';
+          categoryHeader.textContent = categoryItem.name;
+          categoryHeader.dataset.videos = JSON.stringify(categoryItem.videos);
+          categoryHeader.addEventListener('click', handleCategoryClick);
 
-        // Display results
-        diagResultsEl.innerHTML = '';
-        results.forEach(res => {
-            const statusClass = res.success ? 'diag-success' : 'diag-failure';
-            const statusText = res.success ? 'OK' : 'FAIL';
-            diagResultsEl.innerHTML += `
-                <p class="${statusClass}">
-                    <strong>${res.name}:</strong> ${statusText}<br>
-                    <span class="diag-small-text">${res.message}</span>
-                </p>
-            `;
+          const li = document.createElement('li');
+          li.appendChild(categoryHeader);
+          categoryUl.appendChild(li);
         });
-        
-        runDiagnosticsBtn.disabled = false;
-        runDiagnosticsBtn.textContent = 'Re-Run Diagnostics';
+
+        teacherContent.appendChild(categoryUl);
+        teacherHeader.addEventListener('click', (e)=>{ toggleCollapse(teacherHeader, teacherContent); e.stopPropagation(); });
+
+        const teacherLi = document.createElement('li');
+        teacherLi.appendChild(teacherHeader);
+        teacherLi.appendChild(teacherContent);
+        menuListEl.appendChild(teacherLi);
+      });
     }
 
-
-    // =========================================================================
-    // === 6. EVENT LISTENERS ==================================================
-    // =========================================================================
-
-    // Attach listener for the new refresh button
-    if (refreshBtn) {
-        // Now only refreshes data from videos.json
-        refreshBtn.addEventListener('click', () => {
-            fetchDataAndBuildMenu();
-        });
+    function toggleCollapse(headerEl, contentEl){
+      if (!contentEl) return;
+      if (headerEl.classList.contains('open')){ contentEl.style.maxHeight=0; headerEl.classList.remove('open'); }
+      else { contentEl.style.maxHeight = contentEl.scrollHeight + 'px'; headerEl.classList.add('open'); updateParentMaxHeight(headerEl); }
+    }
+    function updateParentMaxHeight(el){
+      let cur = el.parentElement;
+      while (cur && cur.classList.contains('collapsible-content')){
+        if (cur.previousElementSibling?.classList.contains('teacher-header')) cur.style.maxHeight = cur.scrollHeight + 'px';
+        cur = cur.parentElement;
+      }
     }
 
-    // Attach listener for the new close flyout button
-    if (closeFlyoutBtn) {
-        closeFlyoutBtn.addEventListener('click', closeFlyout);
-    }
-    
-    // Attach listener for the new diagnostics button
-    if (runDiagnosticsBtn) {
-        runDiagnosticsBtn.addEventListener('click', runNetworkDiagnostics);
+    function closeFlyout(){
+      flyoutEl.style.display='none';
+      if (activeCategoryHeader){ activeCategoryHeader.classList.remove('active'); activeCategoryHeader=null; }
     }
 
+    function handleCategoryClick(e){
+      e.stopPropagation();
+      const headerEl = e.currentTarget;
+      const videos = JSON.parse(headerEl.dataset.videos);
+      const categoryName = headerEl.textContent.trim();
 
-    // Start the data fetching process
-    fetchDataAndBuildMenu();
+      flyoutHeaderTextEl.textContent = categoryName;
+      flyoutListEl.innerHTML = '';
 
-  </script>
+      videos.forEach(v=>{
+        const li = document.createElement('li');
+        li.textContent = v.title;
+        li.dataset.videoId = v.id;
+        li.addEventListener('click', handleVideoClick);
+        flyoutListEl.appendChild(li);
+      });
+
+      document.querySelectorAll('.collapsible-header').forEach(h=>h.classList.remove('active'));
+      headerEl.classList.add('active');
+      activeCategoryHeader = headerEl;
+      flyoutEl.style.display='block';
+    }
+
+    function handleVideoClick(e){
+      const newId = e.currentTarget.dataset.videoId;
+      pendingVideoId = newId;
+      if (!isPlayerReady){
+        // highlight selection; will cue when API becomes ready
+        document.querySelectorAll('#flyoutList li').forEach(li=>li.classList.remove('selected'));
+        e.currentTarget.classList.add('selected');
+        return;
+      }
+      player.cueVideoById(newId);
+      finishedEl.style.display='none';
+      controlsEl.style.display='flex';
+      playPauseBtn.textContent='▶';
+      seekRange.value=0;
+      document.querySelectorAll('#flyoutList li').forEach(li=>li.classList.remove('selected'));
+      e.currentTarget.classList.add('selected');
+      closeFlyout();
+    }
+
+    document.addEventListener('click', (e)=>{
+      const inFlyout = flyoutEl.contains(e.target);
+      const inSidebar = document.getElementById('sidebar').contains(e.target);
+      if (flyoutEl.style.display !== 'none' && !inFlyout && !inSidebar) closeFlyout();
+    });
+
+    refreshBtn?.addEventListener('click', loadLocalData);
+    closeFlyoutBtn?.addEventListener('click', closeFlyout);
+
+    // Boot
+    addEventListener('contextmenu', e=>e.preventDefault());
+    addEventListener('keydown', e=>{ const blocked=['ArrowLeft','ArrowRight','c','m']; if (blocked.includes(e.key.toLowerCase())){ e.preventDefault(); e.stopPropagation(); } }, {passive:false});
+    loadLocalData();
+  </script>
 </body>
 </html>
