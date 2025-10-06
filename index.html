@@ -379,6 +379,12 @@
     window.onYouTubeIframeAPIReady = function () { isPlayerReady = true; };
 
     function initializePlayer(initialVideoId) {
+        // Only initialize the player if the API is ready
+        if (!isPlayerReady) {
+            console.warn("YouTube IFrame API not ready. Cannot initialize player.");
+            return;
+        }
+
         if (player) {
             try { player.destroy(); } catch (e) { /* silent fail */ }
             if (updateTimer) clearInterval(updateTimer);
@@ -608,6 +614,28 @@
         loadingMessageEl.style.display = 'none';
         menuListEl.style.display = 'block';
         
+        // *************************************************************************
+        // ********************* CRITICAL CHANGE HERE ******************************
+        // *************************************************************************
+        
+        // 1. Render the menu IMMEDIATELY after data is loaded (API or Fallback).
+        // This ensures the student can see the list even if the player API is blocked.
+        renderMenu(); 
+                
+        // 2. Default UI state: Open the first Teacher and Category
+        const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
+        if (firstTeacherHeader) {
+            const firstTeacherContent = firstTeacherHeader.nextElementSibling;
+            toggleCollapse(firstTeacherHeader, firstTeacherContent);
+            
+            const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
+            if(firstCategoryHeader) {
+                // Automatically open the flyout for the first category
+                handleCategoryClick({currentTarget: firstCategoryHeader});
+            }
+        }
+
+        // 3. Now, ONLY wait for the YouTube API to be ready before initializing the player.
         const checkReady = setInterval(() => {
             if (isPlayerReady) {
                 clearInterval(checkReady);
@@ -615,22 +643,9 @@
                 // Find the first video ID to initialize the player
                 const firstVideoId = VIDEO_DATA[0].categories[0].videos[0].id;
                 initializePlayer(firstVideoId);
-                renderMenu();
-                
-                // Default UI state: Open the first Teacher and Category
-                const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
-                if (firstTeacherHeader) {
-                    const firstTeacherContent = firstTeacherHeader.nextElementSibling;
-                    toggleCollapse(firstTeacherHeader, firstTeacherContent);
-                    
-                    const firstCategoryHeader = firstTeacherContent.querySelector('.collapsible-header');
-                    if(firstCategoryHeader) {
-                        // Automatically open the flyout for the first category
-                        handleCategoryClick({currentTarget: firstCategoryHeader});
-                    }
-                }
             }
         }, 100);
+        // *************************************************************************
     }
     
     // =========================================================================
@@ -747,13 +762,29 @@
 
     function handleVideoClick(e) {
         const newVideoId = e.currentTarget.dataset.videoId;
-        player.cueVideoById(newVideoId);
         
-        finishedEl.style.display = 'none';
-        controlsEl.style.display = 'flex';
-        playPauseBtn.textContent = '▶'; 
-        seekRange.value = 0;
-        
+        // Only attempt to cue/load video if the player API is ready
+        if (isPlayerReady && player) {
+            player.cueVideoById(newVideoId);
+            finishedEl.style.display = 'none';
+            controlsEl.style.display = 'flex';
+            playPauseBtn.textContent = '▶'; 
+            seekRange.value = 0;
+        } else {
+             // If player isn't ready, show a message in the player area
+            const playerWrap = document.querySelector('.wrap');
+            playerWrap.style.display = 'grid'; // Ensure the wrap is visible
+            playerWrap.style.placeItems = 'center';
+            playerWrap.innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <h2 style="color: #ff6b6b;">Player Error</h2>
+                    <p>Cannot load the YouTube player. The required service may be blocked by your network security (Jamf).</p>
+                    <p>Video ID: ${newVideoId}</p>
+                </div>
+            `;
+            console.error("Attempted to play video but YouTube IFrame API was not ready.");
+        }
+
         // Update selection styling within the flyout
         document.querySelectorAll('#flyoutList li').forEach(li => {
             li.classList.remove('selected');
