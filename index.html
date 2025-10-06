@@ -9,7 +9,7 @@
   <style>
     /* 1. Reset and Base Styles */
     :root { 
-        --w: 960px; 
+        --w: 960px; /* Target width for the player */
         --menu-width: 300px; 
         --flyout-width: 350px; /* Width for the video list flyout */
         --color-accent: #BEA876; /* Gold/Accent Color for Teachers/Headers */
@@ -31,7 +31,17 @@
         gap: 20px; 
         position: relative; 
     }
-    .content-area { flex-grow: 1; }
+    /*
+      FIXED: Set content-area to fixed width so that .wrap and .controls 
+      inside it can take 100% of that width, keeping them aligned.
+    */
+    .content-area { 
+        flex-grow: 0; /* Prevent it from growing */
+        flex-shrink: 0; /* Prevent it from shrinking */
+        width: var(--w); /* Set it to the fixed player width */
+        display: flex;
+        flex-direction: column; /* Stack video and controls vertically */
+    }
 
     /* 2. Sidebar (Menu) Styles */
     #sidebar {
@@ -185,12 +195,21 @@
     .video-list li:hover { background-color: var(--color-dark-hover); }
 
     /* 3. Player & Controls */
-    .wrap { position: relative; width: 100%; aspect-ratio: 16/9; background:#000; border-radius: 12px 12px 0 0; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+    /* .wrap and .controls are now children of .content-area, which has a fixed width. */
+    .wrap { 
+        position: relative; 
+        width: 100%; /* Takes full width of .content-area (960px) */
+        aspect-ratio: 16/9; 
+        background:#000; 
+        border-radius: 12px 12px 0 0; 
+        overflow:hidden; 
+        box-shadow: 0 8px 24px rgba(0,0,0,.4); 
+    }
     #player { width: 100%; height: 100%; pointer-events: none; }   
     
     /* Control bar styling updated for time display */
     .controls { 
-        width: 100%; 
+        width: 100%; /* Takes full width of .content-area (960px) */
         background: var(--color-primary-bg); 
         padding: 10px 15px; 
         display: flex; 
@@ -614,10 +633,6 @@
         loadingMessageEl.style.display = 'none';
         menuListEl.style.display = 'block';
         
-        // *************************************************************************
-        // ********************* CRITICAL CHANGE HERE ******************************
-        // *************************************************************************
-        
         // 1. Render the menu IMMEDIATELY after data is loaded (API or Fallback).
         // This ensures the student can see the list even if the player API is blocked.
         renderMenu(); 
@@ -645,7 +660,6 @@
                 initializePlayer(firstVideoId);
             }
         }, 100);
-        // *************************************************************************
     }
     
     // =========================================================================
