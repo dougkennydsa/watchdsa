@@ -10,7 +10,7 @@
     body{margin:0;min-height:100vh;background:var(--color-bg-dark);color:var(--color-text-white);font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:20px}
     .container{display:flex;width:calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px);max-width:100%;gap:20px;position:relative}
     .content-area{flex-grow:1}
-    .sidebar-wrapper{position:relative;width:var(--menu-width);flex-shrink:0}
+    .sidebar-wrapper{position:relative;width:var(--menu-width);flex-shrink:0;z-index:15}
     #sidebar{width:100%;background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.3);max-height:calc(100vh - 40px);overflow-y:auto;position:relative;z-index:10}
     #sidebarLogo{width:100%;height:auto;display:block;margin-bottom:15px;border-radius:8px}
     #sidebar::-webkit-scrollbar{width:8px}
@@ -20,6 +20,7 @@
     #loadingMessage{padding:10px;font-size:.9em}
     .teacher-list,.category-list{list-style:none;padding:0;margin:0}
     .teacher-header{font-weight:700;font-size:1.25em;color:var(--color-accent);padding:10px 5px;margin-top:10px;cursor:pointer;user-select:none;display:flex;justify-content:space-between;border-bottom:2px solid var(--color-dark-hover)}
+    .teacher-header::before{content:'🦈';margin-right:8px;display:inline-block;transform:scaleX(-1)}
     .teacher-header::after{content:'+';font-size:1.2em;transition:transform .3s}
     .teacher-header.open::after{content:'-'}
     .collapsible-header{padding:8px 5px;margin-bottom:5px;color:var(--color-text-white);font-size:1em;cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-dark-hover);transition:background-color .2s;padding-left:25px}
