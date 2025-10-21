@@ -968,12 +968,17 @@
         ]
       },
       {
-        "name": "OT Definitions Matter",
+        "name": "OT Definitions Matter Truth",
         "videos": [
           {
             "title": "Truth",
             "id": "Ha2-ya4UAyw"
-          },
+          }
+        ]
+      },
+      {
+        "name": "OT Definitions Matter Tolerance",
+        "videos": [
           {
             "title": "Tolerance",
             "id": "4JLkcADPcJo"
@@ -990,20 +995,44 @@
         ]
       },
       {
-        "name": "OT Arguments for God",
+        "name": "OT Who Created God?",
         "videos": [
           {
             "title": "Who Created God?",
             "id": "1yY9a2SwNx4"
-          },
+          }
+        ]
+      },
+      {
+        "name": "OT Cosmological",
+        "videos": [
           {
             "title": "Cosomological",
             "id": "6CulBuMCLg0"
-          },
+          }
+        ]
+      },
+      {
+        "name": "OT Design",
+        "videos": [
           {
             "title": "Teleological - Design",
             "id": "EE76nwimuT0"
-          },
+          }
+        ]
+      },
+      {
+        "name": "OT Genesis",
+        "videos": [
+          {
+            "title": "Genesis",
+            "id": "GQI72THyO5I"
+          }
+        ]
+      },
+      {
+        "name": "OT Arguments for God",
+        "videos": [
           {
             "title": "Moral Argument",
             "id": "OxiAikEk2vU"
@@ -1046,10 +1075,10 @@
         ]
       },
       {
-        "name": "Doctrine U4 #2 Inerrancy",
+        "name": "Doctrine U4 #2 Six Days",
         "videos": [
           {
-            "title": "Biblical Inerrancy #2",
+            "title": "#2 Six Days",
             "id": "s2MHZaaD9a0"
           }
         ]
