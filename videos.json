@@ -811,6 +811,10 @@
           {
             "title": "The Islamic World: 1000 Years in 18 Minutes",
             "id": "MpcgXTnd_74"
+          },
+          {
+            "title": "Engineering an Empire: The Great Walls of Constantinople",
+            "id": "prdR32wfwHg"
           }
         ]
       }
@@ -1390,6 +1394,10 @@
           {
             "title": "Act 3 - Audiobook",
             "id": "jEqGgd2dVqM"
+          },
+          {
+            "title": "Act 4 - Audiobook",
+            "id": "eNtUOUrbMjY"
           }
         ]
       }
@@ -2293,6 +2301,15 @@
           {
             "title": "4.7 Expanding Democracy",
             "id": "wvtdJa_e7dA"
+          }
+        ]
+      },
+      {
+        "name": "US History",
+        "videos": [
+          {
+            "title": "Crash Course - Roaring Twenties",
+            "id": "VfOR1XCMf7A"
           }
         ]
       }
