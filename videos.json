@@ -562,6 +562,10 @@
           {
             "title": "What is a 401(k)?",
             "id": "tP4zWCS4dMM"
+          },
+          {
+            "title": "Monopolies and Anti-Competitive Markets",
+            "id": "Sb_-wfmJnHA"
           }
         ]
       },
@@ -802,6 +806,10 @@
           {
             "title": "Topic 2.9 Video Japan's Population Problem",
             "id": "3tiqNlrUsHE"
+          },
+          {
+            "title": "Unit 4 FRQ Practice",
+            "id": "Fs_K9wbvsgc"
           }
         ]
       },
@@ -815,6 +823,10 @@
           {
             "title": "Engineering an Empire: The Great Walls of Constantinople",
             "id": "prdR32wfwHg"
+          },
+          {
+            "title": "History vs. Napoleon Bonaparte",
+            "id": "8aq_gRfmjgY"
           }
         ]
       }
@@ -1089,6 +1101,15 @@
         ]
       },
       {
+        "name": "OT Numbers",
+        "videos": [
+          {
+            "title": "Numbers Overview Bible Project",
+            "id": "zebxH-5o-SQ"
+          }
+        ]
+      },
+      {
         "name": "Doctrine U1 How to Study",
         "videos": [
           {
@@ -1129,6 +1150,15 @@
           {
             "title": "#2 Six Days",
             "id": "s2MHZaaD9a0"
+          }
+        ]
+      },
+      {
+        "name": "Holidays - St. Patrick #2",
+        "videos": [
+          {
+            "title": "The Story of St. Patrick",
+            "id": "1jqokxg0wFk"
           }
         ]
       },
@@ -2335,6 +2365,15 @@
           {
             "title": "Crash Course - Roaring Twenties",
             "id": "VfOR1XCMf7A"
+          }
+        ]
+      },
+      {
+        "name": "US HIstory",
+        "videos": [
+          {
+            "title": "Crash Course - Malcolm X and Black Power",
+            "id": "8woU9Rq0cPI"
           }
         ]
       }
