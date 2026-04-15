@@ -7,11 +7,12 @@
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
     :root{--w:960px;--menu-width:300px;--flyout-width:350px;--color-accent:#BEA876;--color-primary-bg:#283891;--color-bg-dark:#0b0d10;--color-text-white:#fff;--color-dark-hover:#3a4a9f}
-    body{margin:0;min-height:100vh;background:var(--color-bg-dark);color:var(--color-text-white);font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:20px}
-    .container{display:flex;width:calc(var(--w) + var(--menu-width) + var(--flyout-width) + 60px);max-width:100%;gap:20px;position:relative}
-    .content-area{flex-grow:1}
-    .sidebar-wrapper{position:relative;width:var(--menu-width);flex-shrink:0;z-index:15}
-    #sidebar{width:100%;background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:0 4px 12px rgba(0,0,0,.3);max-height:calc(100vh - 40px);overflow-y:auto;position:relative;z-index:10}
+    html,body{height:100%}
+    body{margin:0;background:var(--color-bg-dark);color:var(--color-text-white);font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;overflow:hidden}
+    .container{display:flex;width:calc(var(--w) + var(--menu-width) + 40px);max-width:100%;height:100%;gap:20px;position:relative;align-items:center}
+    .content-area{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
+    .sidebar-wrapper{position:relative;width:var(--menu-width);flex-shrink:0;z-index:15;height:100%;display:flex;align-items:center}
+    #sidebar{width:100%;background:var(--color-primary-bg);border-radius:12px;padding:15px;box-sizing:border-box;box-shadow:0 4px 12px rgba(0,0,0,.3);max-height:100%;overflow-y:auto;position:relative;z-index:10}
     #sidebarLogo{width:100%;height:auto;display:block;margin-bottom:15px;border-radius:8px}
     #sidebar::-webkit-scrollbar{width:8px}
     #sidebar::-webkit-scrollbar-track{background:var(--color-dark-hover);border-radius:4px}
@@ -28,16 +29,41 @@
     .collapsible-header::after{content:'▸';font-size:1.1em;transition:transform .3s;margin-left:10px}
     .collapsible-header.active{background-color:var(--color-accent);color:var(--color-primary-bg)}
     .collapsible-content{max-height:0;overflow:hidden;transition:max-height .4s ease-in-out}
-    #videoFlyout{position:absolute;width:var(--flyout-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-shadow:8px 8px 20px rgba(0,0,0,.5);max-height:calc(100vh - 40px);overflow-y:auto;display:none;z-index:20;opacity:0;transform:translateX(20px);transition:opacity .2s ease-out,transform .2s ease-out}
+    #videoFlyout{position:fixed;width:var(--flyout-width);background:var(--color-primary-bg);border-radius:12px;padding:15px;box-sizing:border-box;box-shadow:8px 8px 20px rgba(0,0,0,.5);max-height:calc(100vh - 40px);overflow-y:auto;display:none;z-index:20;opacity:0;transform:translateX(20px);transition:opacity .2s ease-out,transform .2s ease-out}
     #videoFlyout.show{opacity:1;transform:translateX(0)}
     #flyoutBreadcrumb{font-size:.85em;color:#aaa;font-weight:400;margin-bottom:5px;letter-spacing:.02em}
     #flyoutHeader{font-size:1.3em;font-weight:700;color:var(--color-accent);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--color-dark-hover);display:flex;justify-content:space-between;align-items:center}
     #closeFlyoutBtn{background:none;border:none;color:var(--color-accent);font-size:1.5em;cursor:pointer;padding:0 5px;line-height:1;transition:color .2s}
     #closeFlyoutBtn:hover{color:var(--color-text-white)}
     .video-list{list-style:none;padding:0;margin:0}
-    .video-list li{padding:8px 10px;cursor:pointer;border-left:3px solid transparent;transition:background-color .2s,border-left-color .2s;font-size:.95em;line-height:1.3;white-space:normal;color:var(--color-text-white)}
-    .video-list li.selected{border-left-color:var(--color-accent);font-weight:700}
+    .video-list li{display:flex;gap:10px;align-items:center;padding:8px 10px;cursor:pointer;border-left:3px solid transparent;transition:background-color .2s,border-left-color .2s;font-size:.9em;line-height:1.3;white-space:normal;color:var(--color-text-white)}
+    .video-list li.selected{border-left-color:var(--color-accent);font-weight:700;background-color:rgba(190,168,118,.15)}
     .video-list li:hover{background-color:var(--color-dark-hover)}
+    .video-list img,.search-results img{width:96px;height:54px;object-fit:cover;border-radius:4px;flex-shrink:0;background:#000}
+    .video-list .vl-title{flex:1;min-width:0}
+    #searchWrap{position:relative;margin-bottom:12px}
+    #searchInput{width:100%;padding:9px 32px 9px 12px;background:var(--color-dark-hover);border:1px solid transparent;border-radius:8px;color:var(--color-text-white);font-size:.95em;box-sizing:border-box;outline:none;transition:border-color .2s,background-color .2s}
+    #searchInput::placeholder{color:#9aa3c7}
+    #searchInput:focus{border-color:var(--color-accent);background:#1a2152}
+    #searchClearBtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:none;color:#9aa3c7;font-size:1.3em;cursor:pointer;padding:4px 10px;display:none;line-height:1}
+    #searchClearBtn.show{display:block}
+    #searchClearBtn:hover{color:var(--color-text-white)}
+    .search-results{list-style:none;padding:0;margin:0;display:none}
+    .search-results.show{display:block}
+    .search-results li{display:flex;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;transition:background-color .2s}
+    .search-results li:hover{background:var(--color-dark-hover)}
+    .search-results .sr-meta{display:flex;flex-direction:column;min-width:0;justify-content:center;flex:1}
+    .search-results .sr-title{font-size:.9em;line-height:1.3;color:var(--color-text-white);font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+    .search-results .sr-crumb{font-size:.72em;color:var(--color-accent);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    #searchEmpty{display:none;padding:14px 8px;text-align:center;color:#9aa3c7;font-size:.88em}
+    #searchEmpty.show{display:block}
+    #nowPlayingBar{width:100%;max-width:var(--w);display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--color-primary-bg);border-radius:10px;margin-bottom:10px;font-size:.85em;box-sizing:border-box;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+    #nowPlayingBreadcrumb{color:#c5cae9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+    #nowPlayingBreadcrumb strong{color:var(--color-text-white);font-weight:700}
+    #nowPlayingBreadcrumb .np-sep{color:var(--color-accent);margin:0 6px}
+    #nowPlayingUpNext{color:var(--color-accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%;flex-shrink:0;display:none}
+    #nowPlayingUpNext.show{display:block}
+    #nowPlayingUpNext::before{content:'Up next · ';color:#9aa3c7;font-weight:400}
     .wrap{position:relative;width:100%;max-width:var(--w);aspect-ratio:16/9;background:#000;border-radius:12px 12px 0 0;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)}
     #player{width:100%;height:100%;pointer-events:none}
     .controls{width:100%;max-width:var(--w);background:var(--color-primary-bg);padding:10px 15px;display:flex;align-items:center;gap:15px;box-shadow:0 8px 24px rgba(0,0,0,.4);border-radius:0 0 12px 12px;font-size:.9em}
@@ -52,6 +78,7 @@
     .content-area:fullscreen .wrap{width:100%;max-width:100%;flex-grow:1;max-height:calc(100vh - 60px);aspect-ratio:16/9;object-fit:contain;margin:auto;border-radius:0;box-shadow:none}
     .content-area:fullscreen .controls{flex-shrink:0;border-radius:0;width:100%}
     .content-area:fullscreen .finished{width:100%;height:100%;padding-top:50px}
+    .content-area:fullscreen #nowPlayingBar{display:none}
   </style>
 </head>
 <body>
@@ -61,6 +88,12 @@
       <div id="sidebar">
         <img src="./sharkTube_full.png" alt="SharkTube" id="sidebarLogo">
         <p id="loadingMessage">Loading videos...</p>
+        <div id="searchWrap" style="display:none">
+          <input id="searchInput" type="text" placeholder="Search videos, teachers, subjects..." autocomplete="off" spellcheck="false">
+          <button id="searchClearBtn" type="button" title="Clear search" aria-label="Clear search">×</button>
+        </div>
+        <ul class="search-results" id="searchResults"></ul>
+        <div id="searchEmpty">No videos match your search.</div>
         <ul class="teacher-list" id="menuList" style="display:none"></ul>
       </div>
 
@@ -77,6 +110,10 @@
 
     <!-- RIGHT: Player & Controls -->
     <div class="content-area">
+      <div id="nowPlayingBar">
+        <div id="nowPlayingBreadcrumb">Select a video to begin</div>
+        <div id="nowPlayingUpNext"></div>
+      </div>
       <div class="wrap">
         <div id="player" referrerpolicy="strict-origin-when-cross-origin"></div>
         <div class="finished" id="finished" style="display:none">
@@ -108,6 +145,8 @@
     let player, updateTimer, isPlayerReady = false;
     let activeCategoryHeader = null;
     let pendingVideoId = null;
+    let currentQueue = null; // { teacher, category, videos, index }
+    let searchIndex = [];
 
     // -------------------- DOM -----------------------
     const finishedEl = document.getElementById('finished');
@@ -127,9 +166,18 @@
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const contentAreaEl = document.querySelector('.content-area');
     const sidebarEl = document.getElementById('sidebar');
+    const searchWrapEl = document.getElementById('searchWrap');
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const searchResultsEl = document.getElementById('searchResults');
+    const searchEmptyEl = document.getElementById('searchEmpty');
+    const nowPlayingBreadcrumbEl = document.getElementById('nowPlayingBreadcrumb');
+    const nowPlayingUpNextEl = document.getElementById('nowPlayingUpNext');
 
     // -------------------- Utils ---------------------
     function formatTime(s){ if(isNaN(s)||s<0) return '0:00'; const m=Math.floor(s/60); const ss=String(Math.floor(s%60)).padStart(2,'0'); return `${m}:${ss}`; }
+    function thumbUrl(id){ return `https://i.ytimg.com/vi/${id}/mqdefault.jpg`; }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
     // -------------------- YouTube -------------------
     window.onYouTubeIframeAPIReady = function () {
@@ -167,9 +215,21 @@
 
     function onStateChange(e){
       if (e.data === YT.PlayerState.ENDED){
+        // Auto-advance within the current queue so the YouTube end-screen never renders
+        if (currentQueue && currentQueue.videos[currentQueue.index + 1]){
+          currentQueue = { ...currentQueue, index: currentQueue.index + 1 };
+          updateNowPlaying();
+          try { player.loadVideoById(currentQueue.videos[currentQueue.index].id); } catch {}
+          return;
+        }
+        // End of queue: re-cue current to block the end screen, show finished overlay
         if (updateTimer) clearInterval(updateTimer);
         try { player.cueVideoById(player.getVideoData().video_id); } catch {}
         controlsEl.style.display='none'; finishedEl.style.display='grid';
+      } else if (e.data === YT.PlayerState.PLAYING){
+        if (finishedEl.style.display !== 'none') finishedEl.style.display='none';
+        if (controlsEl.style.display === 'none') controlsEl.style.display='flex';
+        if (!updateTimer) updateTimer = setInterval(updatePlayerState, 1000);
       }
     }
     function updatePlayerState(){
@@ -199,21 +259,27 @@
         if (!Array.isArray(data) || !data.length) throw new Error('videos.json is empty or malformed');
 
         VIDEO_DATA = data;
+        buildSearchIndex();
         renderMenu();
         loadingMessageEl.style.display='none';
         menuListEl.style.display='block';
+        searchWrapEl.style.display='block';
 
-        // Auto-open first teacher/category; init player if possible
-        const firstId = VIDEO_DATA[0]?.categories?.[0]?.videos?.[0]?.id;
-        pendingVideoId = firstId || null;
+        // Seed currentQueue with the first category of the first teacher
+        const firstT = VIDEO_DATA[0];
+        const firstC = firstT?.categories?.[0];
+        if (firstC && firstC.videos?.length){
+          currentQueue = { teacher: firstT.teacher, category: firstC.name, videos: firstC.videos, index: 0 };
+          updateNowPlaying();
+          pendingVideoId = firstC.videos[0].id;
+        }
+        // Auto-open first teacher so students see categories immediately
         const firstTeacherHeader = menuListEl.querySelector('.teacher-header');
         if (firstTeacherHeader){
           const firstTeacherContent = firstTeacherHeader.nextElementSibling;
           toggleCollapse(firstTeacherHeader, firstTeacherContent);
-          const firstCategoryHeader = firstTeacherContent?.querySelector('.collapsible-header');
-          if (firstCategoryHeader) handleCategoryClick({ currentTarget:firstCategoryHeader, stopPropagation(){ } });
         }
-        if (isPlayerReady && firstId) initializePlayer(firstId);
+        if (isPlayerReady && pendingVideoId) initializePlayer(pendingVideoId);
 
         // Soft notice if YouTube API is blocked
         setTimeout(()=>{ if (!isPlayerReady) console.warn('YouTube API unavailable – menu usable, player offline.'); }, 3000);
@@ -305,8 +371,18 @@
 
       videos.forEach(v=>{
         const li = document.createElement('li');
-        li.textContent = v.title;
         li.dataset.videoId = v.id;
+        const img = document.createElement('img');
+        img.src = thumbUrl(v.id);
+        img.loading = 'lazy';
+        img.alt = '';
+        img.onerror = () => { img.style.visibility = 'hidden'; };
+        const span = document.createElement('span');
+        span.className = 'vl-title';
+        span.textContent = v.title;
+        li.appendChild(img);
+        li.appendChild(span);
+        if (currentQueue && v.id === currentQueue.videos[currentQueue.index]?.id) li.classList.add('selected');
         li.addEventListener('click', handleVideoClick);
         flyoutListEl.appendChild(li);
       });
@@ -315,36 +391,164 @@
       headerEl.classList.add('active');
       activeCategoryHeader = headerEl;
       
-      // Position flyout adjacent to clicked category
-      const sidebarRect = sidebarEl.getBoundingClientRect();
-      const headerRect = headerEl.getBoundingClientRect();
-      const relativeTop = headerRect.top - sidebarRect.top + sidebarEl.scrollTop;
-      
-      flyoutEl.style.left = `${sidebarEl.offsetWidth + 20}px`;
-      flyoutEl.style.top = `${relativeTop}px`;
-      
       flyoutEl.style.display='block';
+      positionFlyout();
       setTimeout(()=>{ flyoutEl.classList.add('show'); }, 10);
     }
 
-    function handleVideoClick(e){
-      const newId = e.currentTarget.dataset.videoId;
-      pendingVideoId = newId;
-      if (!isPlayerReady){
-        // highlight selection; will cue when API becomes ready
-        document.querySelectorAll('#flyoutList li').forEach(li=>li.classList.remove('selected'));
-        e.currentTarget.classList.add('selected');
+    function positionFlyout(){
+      if (!activeCategoryHeader || flyoutEl.style.display === 'none') return;
+      const sidebarRect = sidebarEl.getBoundingClientRect();
+      const headerRect = activeCategoryHeader.getBoundingClientRect();
+      const margin = 10;
+      // Hide if anchor scrolled out of sidebar view
+      if (headerRect.bottom < sidebarRect.top || headerRect.top > sidebarRect.bottom){
+        flyoutEl.style.visibility = 'hidden';
         return;
       }
-      player.cueVideoById(newId);
-      finishedEl.style.display='none';
-      controlsEl.style.display='flex';
-      playPauseBtn.textContent='▶';
-      seekRange.value=0;
-      document.querySelectorAll('#flyoutList li').forEach(li=>li.classList.remove('selected'));
-      e.currentTarget.classList.add('selected');
+      flyoutEl.style.visibility = 'visible';
+      const left = sidebarRect.right + 20;
+      const flyoutHeight = flyoutEl.offsetHeight;
+      const viewportH = window.innerHeight;
+      let top = headerRect.top;
+      // Clamp inside viewport
+      if (top + flyoutHeight + margin > viewportH) top = Math.max(margin, viewportH - flyoutHeight - margin);
+      if (top < margin) top = margin;
+      flyoutEl.style.left = `${left}px`;
+      flyoutEl.style.top = `${top}px`;
+    }
+
+    function handleVideoClick(e){
+      const id = e.currentTarget.dataset.videoId;
+      if (!activeCategoryHeader) return;
+      const videos = JSON.parse(activeCategoryHeader.dataset.videos);
+      const teacher = activeCategoryHeader.dataset.teacher || '';
+      const category = activeCategoryHeader.textContent.trim();
+      const idx = videos.findIndex(v => v.id === id);
+      if (idx < 0) return;
+      playVideoFromQueue({ teacher, category, videos, index: idx }, true);
+    }
+
+    // -------------------- Unified playback -------------
+    function playVideoFromQueue(queue, userInitiated){
+      currentQueue = queue;
+      const video = queue.videos[queue.index];
+      if (!video) return;
+      updateNowPlaying();
+      pendingVideoId = video.id;
+      if (isPlayerReady && player && player.loadVideoById){
+        if (userInitiated) player.loadVideoById(video.id);
+        else player.cueVideoById(video.id);
+        finishedEl.style.display='none';
+        controlsEl.style.display='flex';
+        playPauseBtn.textContent = userInitiated ? '⸫' : '▶';
+        seekRange.value = 0;
+        if (!updateTimer) updateTimer = setInterval(updatePlayerState, 1000);
+      }
+      document.querySelectorAll('#flyoutList li').forEach(li => {
+        li.classList.toggle('selected', li.dataset.videoId === video.id);
+      });
       closeFlyout();
     }
+
+    function updateNowPlaying(){
+      if (!currentQueue){
+        nowPlayingBreadcrumbEl.textContent = 'Select a video to begin';
+        nowPlayingUpNextEl.classList.remove('show');
+        return;
+      }
+      const v = currentQueue.videos[currentQueue.index];
+      nowPlayingBreadcrumbEl.innerHTML =
+        `${escapeHtml(currentQueue.teacher)}<span class="np-sep">›</span>${escapeHtml(currentQueue.category)}<span class="np-sep">›</span><strong>${escapeHtml(v.title)}</strong>`;
+      const next = currentQueue.videos[currentQueue.index + 1];
+      if (next){
+        nowPlayingUpNextEl.textContent = next.title;
+        nowPlayingUpNextEl.classList.add('show');
+      } else {
+        nowPlayingUpNextEl.classList.remove('show');
+      }
+    }
+
+    // -------------------- Search -----------------------
+    function buildSearchIndex(){
+      searchIndex = [];
+      VIDEO_DATA.forEach(t => {
+        t.categories.forEach(c => {
+          c.videos.forEach((v, idx) => {
+            searchIndex.push({
+              teacher: t.teacher,
+              category: c.name,
+              title: v.title,
+              id: v.id,
+              videos: c.videos,
+              index: idx,
+              haystack: `${t.teacher} ${c.name} ${v.title}`.toLowerCase()
+            });
+          });
+        });
+      });
+    }
+
+    function handleSearch(){
+      const q = searchInput.value.trim().toLowerCase();
+      searchClearBtn.classList.toggle('show', q.length > 0);
+      if (!q){
+        searchResultsEl.classList.remove('show');
+        searchEmptyEl.classList.remove('show');
+        menuListEl.style.display='block';
+        return;
+      }
+      menuListEl.style.display='none';
+      closeFlyout();
+      const terms = q.split(/\s+/).filter(Boolean);
+      const results = searchIndex.filter(item => terms.every(term => item.haystack.includes(term))).slice(0, 60);
+      renderSearchResults(results);
+    }
+
+    function renderSearchResults(results){
+      searchResultsEl.innerHTML = '';
+      if (!results.length){
+        searchResultsEl.classList.remove('show');
+        searchEmptyEl.classList.add('show');
+        return;
+      }
+      searchEmptyEl.classList.remove('show');
+      results.forEach(r => {
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = thumbUrl(r.id);
+        img.loading = 'lazy';
+        img.alt = '';
+        img.onerror = () => { img.style.visibility = 'hidden'; };
+        const meta = document.createElement('div');
+        meta.className = 'sr-meta';
+        const title = document.createElement('div');
+        title.className = 'sr-title';
+        title.textContent = r.title;
+        const crumb = document.createElement('div');
+        crumb.className = 'sr-crumb';
+        crumb.textContent = `${r.teacher} · ${r.category}`;
+        meta.appendChild(title);
+        meta.appendChild(crumb);
+        li.appendChild(img);
+        li.appendChild(meta);
+        li.addEventListener('click', () => {
+          playVideoFromQueue({ teacher: r.teacher, category: r.category, videos: r.videos, index: r.index }, true);
+        });
+        searchResultsEl.appendChild(li);
+      });
+      searchResultsEl.classList.add('show');
+    }
+
+    function clearSearch(){
+      searchInput.value = '';
+      handleSearch();
+      searchInput.focus();
+    }
+
+    searchInput?.addEventListener('input', handleSearch);
+    searchClearBtn?.addEventListener('click', clearSearch);
+    searchInput?.addEventListener('keydown', e => { if (e.key === 'Escape') clearSearch(); });
 
     document.addEventListener('click', (e)=>{
       const inFlyout = flyoutEl.contains(e.target);
@@ -353,10 +557,17 @@
     });
 
     closeFlyoutBtn?.addEventListener('click', closeFlyout);
+    sidebarEl.addEventListener('scroll', positionFlyout, {passive:true});
+    window.addEventListener('resize', positionFlyout);
 
     // Boot
     addEventListener('contextmenu', e=>e.preventDefault());
-    addEventListener('keydown', e=>{ const blocked=['ArrowLeft','ArrowRight','c','m']; if (blocked.includes(e.key.toLowerCase())){ e.preventDefault(); e.stopPropagation(); } }, {passive:false});
+    addEventListener('keydown', e=>{
+      // Let the search box receive all keys freely
+      if (e.target === searchInput) return;
+      const blocked=['ArrowLeft','ArrowRight','c','m'];
+      if (blocked.includes(e.key.toLowerCase())){ e.preventDefault(); e.stopPropagation(); }
+    }, {passive:false});
     loadLocalData();
   </script>
 </body>
